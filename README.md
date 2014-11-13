@@ -1,3 +1,8 @@
+![Travis Status](http://img.shields.io/travis/ARCANEDEV/Sanitizer.svg?style=flat-square)
+![Github Release](http://img.shields.io/github/release/ARCANEDEV/Sanitizer.svg?style=flat-square)
+![Packagist License](http://img.shields.io/packagist/l/arcanedev/sanitizer.svg?style=flat-square)
+![Github Issues](http://img.shields.io/github/issues/ARCANEDEV/Sanitizer.svg?style=flat-square)
+
 Sanitizer Helper
 ==============
 This library helps you to sanitize your data.
