@@ -28,4 +28,4 @@ Coming Soon
 
 ### License
 
-The QR Code Library is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+The Sanitizer Helper Library is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
