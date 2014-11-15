@@ -116,118 +116,118 @@ abstract class Sanitizer implements SanitizerInterface
             $this->setRules($rules);
         }
 
-	    $this->sanitizeByRules($data);
+        $this->sanitizeByRules($data);
 
         return $data;
     }
 
-	/**
-	 * Sanitize each fields by rules
-	 *
-	 * @param array $data
-	 */
-	private function sanitizeByRules(&$data)
-	{
-		foreach ($this->rules as $field => $sanitizerRules) {
-			if ( isset($data[$field]) ) {
-				$this->applySanitizers($data[$field], $sanitizerRules);
-			}
-		}
-	}
+    /**
+     * Sanitize each fields by rules
+     *
+     * @param array $data
+     */
+    private function sanitizeByRules(&$data)
+    {
+        foreach ($this->rules as $field => $sanitizerRules) {
+            if ( isset($data[$field]) ) {
+                $this->applySanitizers($data[$field], $sanitizerRules);
+            }
+        }
+    }
 
-	/**
-	 * Apply Sanitizers
-	 *
-	 * @param mixed $value
-	 * @param array $sanitizers
-	 *
-	 * @throws InvalidSanitizersException
-	 * @throws SanitizeMethodNotFoundException
-	 *
-	 * @return mixed
-	 */
-	private function applySanitizers(&$value, $sanitizers)
-	{
-		foreach ($this->splitSanitizers($sanitizers) as $sanitizer) {
-			$value = $this->applySanitizer($value, $sanitizer);
-		}
+    /**
+     * Apply Sanitizers
+     *
+     * @param mixed $value
+     * @param array $sanitizers
+     *
+     * @throws InvalidSanitizersException
+     * @throws SanitizeMethodNotFoundException
+     *
+     * @return mixed
+     */
+    private function applySanitizers(&$value, $sanitizers)
+    {
+        foreach ($this->splitSanitizers($sanitizers) as $sanitizer) {
+            $value = $this->applySanitizer($value, $sanitizer);
+        }
 
-		return $value;
-	}
+        return $value;
+    }
 
-	/**
-	 * Convert sanitizer rules to array
-	 *
-	 * @param string|array $sanitizers
-	 *
-	 * @throws InvalidSanitizersException
-	 *
-	 * @return array
-	 */
-	private function splitSanitizers($sanitizers)
-	{
-		if ( is_array($sanitizers) ) {
-			return $sanitizers;
-		}
+    /**
+     * Convert sanitizer rules to array
+     *
+     * @param string|array $sanitizers
+     *
+     * @throws InvalidSanitizersException
+     *
+     * @return array
+     */
+    private function splitSanitizers($sanitizers)
+    {
+        if ( is_array($sanitizers) ) {
+            return $sanitizers;
+        }
 
-		if ( is_string($sanitizers) ) {
-			return $this->splitStringSanitizers($sanitizers);
-		}
+        if ( is_string($sanitizers) ) {
+            return $this->splitStringSanitizers($sanitizers);
+        }
 
-		throw new InvalidSanitizersException('Sanitizer rules must be an array or string.');
-	}
+        throw new InvalidSanitizersException('Sanitizer rules must be an array or string.');
+    }
 
-	/**
-	 * @param $sanitizers
-	 *
-	 * @throws InvalidSanitizersException
-	 *
-	 * @return array
-	 */
-	private function splitStringSanitizers($sanitizers)
-	{
-		if ( empty($sanitizers) ) {
-			throw new InvalidSanitizersException("Sanitizer rules mustn't be an empty string.");
-		}
+    /**
+     * @param $sanitizers
+     *
+     * @throws InvalidSanitizersException
+     *
+     * @return array
+     */
+    private function splitStringSanitizers($sanitizers)
+    {
+        if ( empty($sanitizers) ) {
+            throw new InvalidSanitizersException("Sanitizer rules mustn't be an empty string.");
+        }
 
-		$sanitizers = explode('|', $sanitizers);
+        $sanitizers = explode('|', $sanitizers);
 
-		$sanitizers = array_map(function($sanitizer) {
-			return trim($sanitizer);
-		}, $sanitizers);
+        $sanitizers = array_map(function($sanitizer) {
+            return trim($sanitizer);
+        }, $sanitizers);
 
-		return array_filter($sanitizers);
-	}
+        return array_filter($sanitizers);
+    }
 
 
-	/**
-	 * Apply Sanitizer
-	 *
-	 * @param mixed $value
-	 * @param string $sanitizer
-	 *
-	 * @throws SanitizeMethodNotFoundException
-	 *
-	 * @return mixed
-	 */
-	private function applySanitizer($value, $sanitizer)
-	{
-		if ( ! $this->sanitizerExists($sanitizer) ) {
-			throw new SanitizeMethodNotFoundException("Sanitize Method [" . $sanitizer . "] not found !");
-		}
+    /**
+     * Apply Sanitizer
+     *
+     * @param mixed $value
+     * @param string $sanitizer
+     *
+     * @throws SanitizeMethodNotFoundException
+     *
+     * @return mixed
+     */
+    private function applySanitizer($value, $sanitizer)
+    {
+        if ( ! $this->sanitizerExists($sanitizer) ) {
+            throw new SanitizeMethodNotFoundException("Sanitize Method [" . $sanitizer . "] not found !");
+        }
 
-		// If a custom sanitizer is registered on the subclass, then let's trigger that instead.
-		if ( $this->hasSanitizerMethod($sanitizer) ) {
-			$sanitizer = $this->getSanitizerMethod($sanitizer);
-		}
-		elseif ( $this->hasCustomSanitizer($sanitizer) ) {
-			$sanitizer = $this->sanitizers[$sanitizer];
-		}
+        // If a custom sanitizer is registered on the subclass, then let's trigger that instead.
+        if ( $this->hasSanitizerMethod($sanitizer) ) {
+            $sanitizer = $this->getSanitizerMethod($sanitizer);
+        }
+        elseif ( $this->hasCustomSanitizer($sanitizer) ) {
+            $sanitizer = $this->sanitizers[$sanitizer];
+        }
 
-		return call_user_func($sanitizer, $value);
-	}
+        return call_user_func($sanitizer, $value);
+    }
 
-	/**
+    /**
      * Register a custom sanitizer
      *
      * @param string   $name     Name of the sanitizer
@@ -329,7 +329,7 @@ abstract class Sanitizer implements SanitizerInterface
      */
     protected function sanitizeEmail($email)
     {
-	    $email = strtolower(trim($email));
+        $email = strtolower(trim($email));
 
         return filter_var($email, FILTER_SANITIZE_EMAIL);
     }
@@ -347,7 +347,7 @@ abstract class Sanitizer implements SanitizerInterface
 
         // $url = parse_url($url);
         if ( substr($url, 0, 7) !== "http://" or substr($url, 0, 8) !== "https://" ) {
-	        $url = "http://" . $url;
+            $url = "http://" . $url;
         }
 
         return filter_var($url, FILTER_SANITIZE_URL);
