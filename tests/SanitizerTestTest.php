@@ -101,6 +101,22 @@ class SanitizerTestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['email' => 'hello@gmail.com'], $this->sanitizer->sanitize($data, $rules));
     }
 
+	/**
+	 * @test
+	 */
+	public function testIfCanSanitizeByClassMethodsThree()
+	{
+		$data = [
+			'web' => 'www.inter net.free ¨ù'
+		];
+
+		$rules = [
+			'web' => 'url',
+		];
+
+		$this->assertEquals(['web' => 'http://www.internet.free'], $this->sanitizer->sanitize($data, $rules));
+	}
+
     /**
      * @test
      */
