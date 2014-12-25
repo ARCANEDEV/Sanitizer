@@ -2,7 +2,7 @@
 
 use Arcanedev\Sanitizer\Sanitizer;
 
-class SanitizerTestTest extends \PHPUnit_Framework_TestCase
+class SanitizerTestTest extends TestCase
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
@@ -19,7 +19,7 @@ class SanitizerTestTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->sanitizer = new UserSanitizerTest;
+        $this->sanitizer = new UserSanitizer;
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -29,21 +29,59 @@ class SanitizerTestTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function testIfCanSetSanitizerRules()
+    public function testCanSetSanitizerStringRules()
     {
         $rules = [
             'email' => 'trim|strtolower',
         ];
 
         $this->sanitizer->setRules($rules);
-
         $this->assertTrue($this->sanitizer->hasRules());
+
+        $this->sanitizer->sanitize([
+            'email' => 'FOO@BAR.COM '
+        ]);
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Arcanedev\Sanitizer\Exceptions\InvalidSanitizersException
+     */
+    public function testMustThrowInvalidSanitizersExceptionOnEmptyString()
+    {
+        $data = [
+            'email' => 'FOO@BAR.COM '
+        ];
+
+        $rules = [
+            'email' => '',
+        ];
+
+        $this->sanitizer->sanitize($data, $rules);
     }
 
     /**
      * @test
      */
-    public function testIfCanRegisterSanitizer()
+    public function testCanSetSanitizerArrayRules()
+    {
+        $rules = [
+            'email' => ['trim', 'strtolower'],
+        ];
+
+        $this->sanitizer->setRules($rules);
+        $this->assertTrue($this->sanitizer->hasRules());
+
+        $this->sanitizer->sanitize([
+            'email' => 'FOO@BAR.COM '
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function testCanRegisterSanitizer()
     {
         $this->registerSlugSanitizer();
 
@@ -53,7 +91,7 @@ class SanitizerTestTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function testIfCanSanitizeByPhpFunctions()
+    public function testCanSanitizeByPhpFunctions()
     {
         $data = [
             'email' => ' hello@GMAIL.com  '
@@ -72,7 +110,7 @@ class SanitizerTestTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function testIfCanSanitizeByClassMethodsOne()
+    public function testCanSanitizeByClassMethodsOne()
     {
         $data = [
             'message' => 'hElLo !'
@@ -88,7 +126,7 @@ class SanitizerTestTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function testIfCanSanitizeByClassMethodsTwo()
+    public function testCanSanitizeByClassMethodsTwo()
     {
         $data = [
             'email' => 'hello@GMAIL.com'
@@ -104,7 +142,7 @@ class SanitizerTestTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function testIfCanSanitizeByClassMethodsThree()
+	public function testCanSanitizeByClassMethodsThree()
 	{
 		$data = [
 			'web' => 'www.inter net.free ¨ù'
@@ -120,7 +158,7 @@ class SanitizerTestTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function testIfCanSanitizeByCustomSanitizer()
+    public function testCanSanitizeByCustomSanitizer()
     {
         $data = [
             'title' => 'Slugify this title',
@@ -152,6 +190,25 @@ class SanitizerTestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     *
+     * @expectedException \Arcanedev\Sanitizer\Exceptions\InvalidSanitizersException
+     */
+    public function testMustThrowInvalidSanitizersExceptionOnEmpty()
+    {
+        $data  = [
+            'foo' => 'bar'
+        ];
+
+        $rules = [
+            'foo' => true
+        ];
+
+        $sanitizer = new EmptySanitizer;
+        $sanitizer->sanitize($data, $rules);
+    }
+
+    /**
+     * @test
      * @expectedException \Arcanedev\Sanitizer\Exceptions\SanitizeMethodNotFoundException
      */
     public function testMustThrowSanitizeMethodNotFound()
@@ -169,6 +226,7 @@ class SanitizerTestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     *
      * @expectedException \Arcanedev\Sanitizer\Exceptions\SanitizerMethodAlreadyExistsException
      */
     public function testMustThrowMethodAlreadyExists()
@@ -176,6 +234,16 @@ class SanitizerTestTest extends \PHPUnit_Framework_TestCase
         $this->registerSlugSanitizer();
 
         $this->registerSlugSanitizer();
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Arcanedev\Sanitizer\Exceptions\SanitizerNotCallableException
+     */
+    public function testMustThrowNotCallableException()
+    {
+        $this->sanitizer->register('foo', 'bar');
     }
 
     /* ------------------------------------------------------------------------------------------------

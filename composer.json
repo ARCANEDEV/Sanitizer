@@ -1,6 +1,7 @@
 {
     "name": "arcanedev/sanitizer",
     "description": "Sanitizer Helper",
+    "license": "MIT",
     "authors": [
         {
             "name": "ARCANEDEV",
@@ -11,7 +12,9 @@
         "php": ">=5.4.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.3"
+        "phpunit/phpunit": "~4.4",
+        "phpunit/phpcov": "~2.0",
+        "satooshi/php-coveralls": "dev-master"
     },
     "autoload": {
         "psr-4": {
@@ -19,6 +22,5 @@
             "Arcanedev\\Sanitizer\\Tests\\": "tests/"
         }
     },
-    "license": "MIT",
-    "minimum-stability": "dev"
+    "minimum-stability": "stable"
 }

@@ -2,6 +2,7 @@ Sanitizer Helper
 ==============
 [![Travis Status](http://img.shields.io/travis/ARCANEDEV/Sanitizer.svg?style=flat-square)](https://travis-ci.org/ARCANEDEV/Sanitizer)
 [![Github Release](http://img.shields.io/github/release/ARCANEDEV/Sanitizer.svg?style=flat-square)](https://github.com/ARCANEDEV/Sanitizer/releases)
+[![Coverage Status](http://img.shields.io/coveralls/ARCANEDEV/Sanitizer.svg?style=flat-square)](https://coveralls.io/r/ARCANEDEV/Sanitizer?branch=master)
 [![Packagist License](http://img.shields.io/packagist/l/arcanedev/sanitizer.svg?style=flat-square)](http://opensource.org/licenses/MIT)
 [![Github Issues](http://img.shields.io/github/issues/ARCANEDEV/Sanitizer.svg?style=flat-square)](https://github.com/ARCANEDEV/Sanitizer/issues)
 
