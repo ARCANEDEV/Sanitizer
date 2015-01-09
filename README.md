@@ -32,7 +32,23 @@ You can install the package via [Composer](https://getcomposer.org/). Add this t
 And install it via `composer install` or `composer update`.
 
 ### Laravel
-Coming Soon...
+Once the package is installed, you can register the service provider in `app/config/app.php` in the `providers` array:
+
+```php
+'providers' => [
+    ...
+    'Arcanedev\Sanitizer\Laravel\ServiceProvider',
+],
+```
+
+And the facade in the `aliases` array:
+
+```php
+'aliases' => [
+    ...
+    'Sanitizor' => 'Arcanedev\Sanitizer\Laravel\Facade',
+],
+```
 
 ## USAGE
 Now simply extend the Sanitizer class :
@@ -65,8 +81,39 @@ $user      = $sanitizer->sanitize($data);
 var_dump($user);
 ```
 
-Check the examples/tests folder to learn some tricks.
+### Laravel USAGE
 
+You can use Sanitizer like Laravel Validator Facade :
+
+```php
+$rules = [
+    'lastname'  => 'trim|strtolower|ucfirst',
+    'firstname' => 'trim|strtoupper',
+    'email'     => 'trim|strtolower'
+];
+
+$data = [
+    'lastname'  => 'john',
+    'firstname' => 'doe',
+    'email'     => 'John.DOE@EmAiL.com'
+];
+
+$sanitizor = Sanitizor::make($data, $rules);
+
+var_dump($sanitizor);
+```
+
+Check the `examples` or `tests` folder to learn some tricks.
+
+## TODO
+
+  - [ ] Documentation
+  - [ ] More Examples
+  - [x] More tests and code coverage (~99%)
+  - [x] Laravel support
+  - [ ] Registering sanitizers in IoC Container (only Laravel)
+  - [ ] Refactoring
+  
 ## Contributing
 If you have any suggestions or improvements feel free to create an issue or create a Pull Request.
 
