@@ -1,6 +1,7 @@
 {
     "name": "arcanedev/sanitizer",
     "description": "Sanitizer Helper",
+    "keywords": ["sanitizer", "sanitiser", "data", "rules", "laravel"],
     "license": "MIT",
     "authors": [
         {
