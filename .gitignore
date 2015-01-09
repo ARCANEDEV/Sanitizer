@@ -1,5 +1,5 @@
 .idea/
-arcanedev/
+_arcanedev/
 build/
 vendor/
 composer.phar

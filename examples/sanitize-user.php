@@ -4,7 +4,6 @@ include_once __DIR__ . "/../vendor/autoload.php";
 
 use Arcanedev\Sanitizer\Sanitizer;
 
-// Single Responsibility Principle class
 class UserSanitizer extends Sanitizer
 {
     protected $rules = [

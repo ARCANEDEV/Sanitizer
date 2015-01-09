@@ -1,39 +1,74 @@
 Sanitizer Helper
 ==============
 [![Travis Status](http://img.shields.io/travis/ARCANEDEV/Sanitizer.svg?style=flat-square)](https://travis-ci.org/ARCANEDEV/Sanitizer)
-[![Github Release](http://img.shields.io/github/release/ARCANEDEV/Sanitizer.svg?style=flat-square)](https://github.com/ARCANEDEV/Sanitizer/releases)
 [![Coverage Status](http://img.shields.io/coveralls/ARCANEDEV/Sanitizer.svg?style=flat-square)](https://coveralls.io/r/ARCANEDEV/Sanitizer?branch=master)
-[![Packagist License](http://img.shields.io/packagist/l/arcanedev/sanitizer.svg?style=flat-square)](http://opensource.org/licenses/MIT)
+[![Github Release](http://img.shields.io/github/release/ARCANEDEV/Sanitizer.svg?style=flat-square)](https://github.com/ARCANEDEV/Sanitizer/releases)
+[![Packagist License](http://img.shields.io/packagist/l/arcanedev/sanitizer.svg?style=flat-square)](https://github.com/ARCANEDEV/Sanitizer/blob/master/LICENSE)
+[![Packagist Downloads](https://img.shields.io/packagist/dt/arcanedev/sanitizer.svg?style=flat-square)](https://packagist.org/packages/arcanedev/sanitizer)
 [![Github Issues](http://img.shields.io/github/issues/ARCANEDEV/Sanitizer.svg?style=flat-square)](https://github.com/ARCANEDEV/Sanitizer/issues)
 
 This library helps you to sanitize your data.
 
 *By [ARCANEDEV&copy;](http://www.arcanedev.net/)*
 
-### Contributing
-If you have any suggestions or improvements feel free to create an issue or create a Pull Request.
-
 ### Requirements
+
     - PHP >= 5.4.0
     
 ## Installation
 
-First include the sanitizer package.
+### Composer
 
-    "arcanedev/sanitizer": "dev-master"
+You can install the package via [Composer](https://getcomposer.org/). Add this to your composer.json:
 
-Now simply `use` the Sanitizer class.
+```json
+{
+    "require": {
+        "arcanedev/sanitizer": "~1.0"
+    }
+}
+```
 
-    use Arcanedev\Sanitizer\Sanitizer;
+And install it via `composer install` or `composer update`.
+
+### Laravel
+Coming Soon...
 
 ## USAGE
+Now simply extend the Sanitizer class :
 
-Check the examples folder to learn some tricks.
+```php
+// UserSanitizer.php
+use Arcanedev\Sanitizer\Sanitizer;
 
-## Laravel Version
+class UserSanitizer extends Sanitizer
+{
+    protected $rules = [
+        'lastname'  => 'trim|strtolower|ucfirst',
+        'firstname' => 'trim|strtoupper',
+        'email'     => 'trim|strtolower'
+    ];
+}
 
-Coming Soon
+// Somewhere in your project (Controllers, Models ...)
 
-### License
+// After receiving data from outer space
+$data = [
+    'lastname'  => 'john',
+    'firstname' => 'doe',
+    'email'     => 'John.DOE@EmAiL.com'
+];
 
-The Sanitizer Helper Library is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+// Sanitize E.T.
+$sanitizer = new UserSanitizer;
+$user      = $sanitizer->sanitize($data);
+var_dump($user);
+```
+
+Check the examples/tests folder to learn some tricks.
+
+## Contributing
+If you have any suggestions or improvements feel free to create an issue or create a Pull Request.
+
+## License
+The Sanitizer Helper is open-sourced software licensed under the [MIT license](https://github.com/ARCANEDEV/Sanitizer/blob/master/LICENSE)
