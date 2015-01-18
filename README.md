@@ -1,9 +1,9 @@
-Sanitizer Helper
+Sanitizer Helper [![Packagist License](http://img.shields.io/packagist/l/arcanedev/sanitizer.svg?style=flat-square)](https://github.com/ARCANEDEV/Sanitizer/blob/master/LICENSE)
 ==============
 [![Travis Status](http://img.shields.io/travis/ARCANEDEV/Sanitizer.svg?style=flat-square)](https://travis-ci.org/ARCANEDEV/Sanitizer)
-[![Coverage Status](http://img.shields.io/coveralls/ARCANEDEV/Sanitizer.svg?style=flat-square)](https://coveralls.io/r/ARCANEDEV/Sanitizer?branch=master)
+[![Coverage Status](https://img.shields.io/scrutinizer/coverage/g/ARCANEDEV/Sanitizer.svg?style=flat-square)](https://scrutinizer-ci.com/g/ARCANEDEV/Sanitizer/?branch=master)
+[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/ARCANEDEV/Sanitizer.svg?style=flat-square)](https://scrutinizer-ci.com/g/ARCANEDEV/Sanitizer/?branch=master)
 [![Github Release](http://img.shields.io/github/release/ARCANEDEV/Sanitizer.svg?style=flat-square)](https://github.com/ARCANEDEV/Sanitizer/releases)
-[![Packagist License](http://img.shields.io/packagist/l/arcanedev/sanitizer.svg?style=flat-square)](https://github.com/ARCANEDEV/Sanitizer/blob/master/LICENSE)
 [![Packagist Downloads](https://img.shields.io/packagist/dt/arcanedev/sanitizer.svg?style=flat-square)](https://packagist.org/packages/arcanedev/sanitizer)
 [![Github Issues](http://img.shields.io/github/issues/ARCANEDEV/Sanitizer.svg?style=flat-square)](https://github.com/ARCANEDEV/Sanitizer/issues)
 
@@ -105,17 +105,20 @@ var_dump($sanitizor);
 
 Check the `examples` or `tests` folder to learn some tricks.
 
+## Contributing
+
+If you have any suggestions or improvements feel free to create an issue or create a Pull Request.
+
 ## TODO
 
   - [ ] Documentation
   - [ ] More Examples
-  - [x] More tests and code coverage (~99%)
-  - [x] Laravel support
+  - [x] More tests and code coverage
+  - [x] Laravel support (v4.2)
+  - [ ] Laravel support (v5.0)
   - [ ] Registering sanitizers in IoC Container (only Laravel)
   - [ ] Refactoring
-  
-## Contributing
-If you have any suggestions or improvements feel free to create an issue or create a Pull Request.
 
 ## License
+
 The Sanitizer Helper is open-sourced software licensed under the [MIT license](https://github.com/ARCANEDEV/Sanitizer/blob/master/LICENSE)
