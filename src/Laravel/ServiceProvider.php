@@ -62,7 +62,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     private function registerHelpers()
     {
-        $this->app->bindShared('arcanedev.sanitizer', function ($app) {
+        $this->app->bindShared('arcanedev.sanitizer', function () {
             return new Sanitizor;
         });
     }
