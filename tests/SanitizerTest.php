@@ -46,7 +46,26 @@ class SanitizerTest extends TestCase
     public function testCanSetSanitizerStringRules()
     {
         $this->sanitizer->setRules([
+            'email' => 'trim|strtolower'
+        ]);
+
+        $sanitized = $this->sanitizer->sanitize([
+            'email' => 'FOO@BAR.COM '
+        ]);
+
+        $this->assertEquals([
+            'email' => 'foo@bar.com'
+        ], $sanitized);
+    }
+
+    /**
+     * @test
+     */
+    public function testCanSkipRulesIfDataNotExists()
+    {
+        $this->sanitizer->setRules([
             'email' => 'trim|strtolower',
+            'url'   => 'url',
         ]);
 
         $sanitized = $this->sanitizer->sanitize([
