@@ -34,7 +34,7 @@ abstract class Sanitizer implements SanitizerInterface
     /**
      * Set sanitizer rules
      *
-     * @param array $rules
+     * @param  array|null $rules
      *
      * @throws InvalidSanitizersException
      *
