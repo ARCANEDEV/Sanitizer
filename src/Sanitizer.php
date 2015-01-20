@@ -151,7 +151,9 @@ abstract class Sanitizer implements SanitizerInterface
     }
 
     /**
-     * @param $sanitizers
+     * Split string Sanitizers to array
+     * 
+     * @param  string $sanitizers
      *
      * @throws InvalidSanitizersException
      *
