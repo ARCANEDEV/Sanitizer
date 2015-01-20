@@ -1,11 +1,10 @@
 <?php namespace Arcanedev\Sanitizer;
 
 use Arcanedev\Sanitizer\Contracts\SanitizerInterface;
-
 use Arcanedev\Sanitizer\Exceptions\InvalidSanitizersException;
+use Arcanedev\Sanitizer\Exceptions\NotCallableException;
 use Arcanedev\Sanitizer\Exceptions\SanitizeMethodNotFoundException;
 use Arcanedev\Sanitizer\Exceptions\SanitizerMethodAlreadyExistsException;
-use Arcanedev\Sanitizer\Exceptions\NotCallableException;
 
 abstract class Sanitizer implements SanitizerInterface
 {
@@ -152,7 +151,7 @@ abstract class Sanitizer implements SanitizerInterface
 
     /**
      * Split string Sanitizers to array
-     * 
+     *
      * @param  string $sanitizers
      *
      * @throws InvalidSanitizersException
