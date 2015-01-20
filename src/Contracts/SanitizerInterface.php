@@ -3,7 +3,7 @@
 use Arcanedev\Sanitizer\Exceptions\InvalidSanitizersException;
 use Arcanedev\Sanitizer\Exceptions\SanitizeMethodNotFoundException;
 use Arcanedev\Sanitizer\Exceptions\SanitizerMethodAlreadyExistsException;
-use Arcanedev\Sanitizer\Exceptions\SanitizerNotCallableException;
+use Arcanedev\Sanitizer\Exceptions\NotCallableException;
 
 interface SanitizerInterface
 {
@@ -11,13 +11,6 @@ interface SanitizerInterface
      |  Getters & Setters
      | ------------------------------------------------------------------------------------------------
      */
-    /**
-     * Get sanitizer rules
-     *
-     * @return array
-     */
-    public function getRules();
-
     /**
      * Set sanitizer rules
      *
@@ -28,13 +21,6 @@ interface SanitizerInterface
      * @return SanitizerInterface
      */
     public function setRules($rules);
-
-    /**
-     * Get Sanitizers
-     *
-     * @return array
-     */
-    public function getSanitizers();
 
     /* ------------------------------------------------------------------------------------------------
      |  Functions
@@ -60,28 +46,10 @@ interface SanitizerInterface
      * @param callable $callback
      * @param bool     $override Override sanitizer if it already exists
      *
-     * @throws SanitizerNotCallableException
+     * @throws NotCallableException
      * @throws SanitizerMethodAlreadyExistsException
      *
      * @return SanitizerInterface
      */
     public function register($name, $callback, $override = false);
-
-    /* ------------------------------------------------------------------------------------------------
-     |  Check Functions
-     | ------------------------------------------------------------------------------------------------
-     */
-    /**
-     * Check has sanitizer rules
-     *
-     * @return bool
-     */
-    public function hasRules();
-
-    /**
-     * Check has custom sanitizers
-     *
-     * @return bool
-     */
-    public function hasSanitizers();
 }

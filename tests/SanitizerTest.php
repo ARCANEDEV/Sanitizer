@@ -32,18 +32,30 @@ class SanitizerTest extends TestCase
     /**
      * @test
      */
+    public function testCanBeInstantiated()
+    {
+        $this->assertInstanceOf(
+            'Arcanedev\\Sanitizer\\Sanitizer',
+            $this->sanitizer
+        );
+    }
+
+    /**
+     * @test
+     */
     public function testCanSetSanitizerStringRules()
     {
-        $rules = [
+        $this->sanitizer->setRules([
             'email' => 'trim|strtolower',
-        ];
+        ]);
 
-        $this->sanitizer->setRules($rules);
-        $this->assertTrue($this->sanitizer->hasRules());
-
-        $this->sanitizer->sanitize([
+        $sanitized = $this->sanitizer->sanitize([
             'email' => 'FOO@BAR.COM '
         ]);
+
+        $this->assertEquals([
+            'email' => 'foo@bar.com'
+        ], $sanitized);
     }
 
     /**
@@ -69,26 +81,17 @@ class SanitizerTest extends TestCase
      */
     public function testCanSetSanitizerArrayRules()
     {
-        $rules = [
+        $this->sanitizer->setRules([
             'email' => ['trim', 'strtolower'],
-        ];
+        ]);
 
-        $this->sanitizer->setRules($rules);
-        $this->assertTrue($this->sanitizer->hasRules());
-
-        $this->sanitizer->sanitize([
+        $sanitized = $this->sanitizer->sanitize([
             'email' => 'FOO@BAR.COM '
         ]);
-    }
 
-    /**
-     * @test
-     */
-    public function testCanRegisterSanitizer()
-    {
-        $this->registerSlugSanitizer();
-
-        $this->assertTrue($this->sanitizer->hasSanitizers());
+        $this->assertEquals([
+            'email' => 'foo@bar.com'
+        ], $sanitized);
     }
 
     /**
@@ -106,7 +109,6 @@ class SanitizerTest extends TestCase
 
         $data = $this->sanitizer->sanitize($data, $rules);
 
-        $this->assertTrue($this->sanitizer->hasRules());
         $this->assertEquals(['email' => 'hello@gmail.com'], $data);
     }
 
@@ -242,7 +244,7 @@ class SanitizerTest extends TestCase
     /**
      * @test
      *
-     * @expectedException \Arcanedev\Sanitizer\Exceptions\SanitizerNotCallableException
+     * @expectedException \Arcanedev\Sanitizer\Exceptions\NotCallableException
      */
     public function testMustThrowNotCallableException()
     {
