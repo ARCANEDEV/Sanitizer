@@ -26,7 +26,11 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     public function boot()
     {
-        $this->package('arcanedev/sanitizer', 'sanitizer', __DIR__ . '/..');
+        $this->package(
+            'arcanedev/sanitizer',
+            'sanitizer',
+            realpath(__DIR__ . '/..')
+        );
     }
 
     /**
