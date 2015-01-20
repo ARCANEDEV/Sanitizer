@@ -14,7 +14,7 @@ interface SanitizerInterface
     /**
      * Set sanitizer rules
      *
-     * @param array $rules
+     * @param  array $rules
      *
      * @throws InvalidSanitizersException
      *
@@ -29,8 +29,8 @@ interface SanitizerInterface
     /**
      * Sanitize data
      *
-     * @param array      $data
-     * @param array|null $rules
+     * @param  array      $data
+     * @param  array|null $rules
      *
      * @throws InvalidSanitizersException
      * @throws SanitizeMethodNotFoundException
@@ -42,9 +42,9 @@ interface SanitizerInterface
     /**
      * Register a custom sanitizer
      *
-     * @param string   $name     Name of the sanitizer
-     * @param callable $callback
-     * @param bool     $override Override sanitizer if it already exists
+     * @param  string   $name     Name of the sanitizer
+     * @param  callable $callback
+     * @param  bool     $override Override sanitizer if it already exists
      *
      * @throws NotCallableException
      * @throws SanitizerMethodAlreadyExistsException

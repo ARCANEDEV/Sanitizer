@@ -53,7 +53,7 @@ abstract class Sanitizer implements SanitizerInterface
     /**
      * Get sanitizer method name
      *
-     * @param string $name
+     * @param  string $name
      *
      * @return string
      */
@@ -65,7 +65,7 @@ abstract class Sanitizer implements SanitizerInterface
     /**
      * Get sanitizer method
      *
-     * @param string $sanitizer
+     * @param  string $sanitizer
      *
      * @return array
      */
@@ -108,8 +108,8 @@ abstract class Sanitizer implements SanitizerInterface
     /**
      * Apply Sanitizers
      *
-     * @param mixed $value
-     * @param array $sanitizers
+     * @param  mixed $value
+     * @param  array $sanitizers
      *
      * @throws InvalidSanitizersException
      * @throws SanitizeMethodNotFoundException
@@ -128,7 +128,7 @@ abstract class Sanitizer implements SanitizerInterface
     /**
      * Convert sanitizer rules to array
      *
-     * @param string|array $sanitizers
+     * @param  string|array $sanitizers
      *
      * @throws InvalidSanitizersException
      *
@@ -179,8 +179,8 @@ abstract class Sanitizer implements SanitizerInterface
     /**
      * Apply Sanitizer
      *
-     * @param mixed $value
-     * @param string $sanitizer
+     * @param  mixed $value
+     * @param  string $sanitizer
      *
      * @throws SanitizeMethodNotFoundException
      *
@@ -208,9 +208,9 @@ abstract class Sanitizer implements SanitizerInterface
     /**
      * Register a custom sanitizer
      *
-     * @param string   $name     Name of the sanitizer
-     * @param Callable $callback
-     * @param bool     $override Override sanitizer if it already exists
+     * @param  string   $name     Name of the sanitizer
+     * @param  Callable $callback
+     * @param  bool     $override Override sanitizer if it already exists
      *
      * @throws NotCallableException
      * @throws SanitizerMethodAlreadyExistsException
@@ -243,7 +243,7 @@ abstract class Sanitizer implements SanitizerInterface
     /**
      * Check if a sanitizer exists
      *
-     * @param string $name
+     * @param  string $name
      *
      * @return bool
      */
@@ -257,7 +257,7 @@ abstract class Sanitizer implements SanitizerInterface
     /**
      * Check if has a custom sanitizer method
      *
-     * @param string $name
+     * @param  string $name
      *
      * @return bool
      */
@@ -269,7 +269,7 @@ abstract class Sanitizer implements SanitizerInterface
     /**
      * Check if has a custom sanitizer closure
      *
-     * @param string $name
+     * @param  string $name
      *
      * @return bool
      */
@@ -281,7 +281,7 @@ abstract class Sanitizer implements SanitizerInterface
     /**
      * Check Rules
      *
-     * @param array $rules
+     * @param  array $rules
      *
      * @throws InvalidSanitizersException
      */
@@ -315,7 +315,7 @@ abstract class Sanitizer implements SanitizerInterface
     /**
      * Sanitize an url.
      *
-     * @param string $url
+     * @param  string $url
      *
      * @return string
      */
