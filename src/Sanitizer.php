@@ -6,6 +6,10 @@ use Arcanedev\Sanitizer\Exceptions\NotCallableException;
 use Arcanedev\Sanitizer\Exceptions\SanitizeMethodNotFoundException;
 use Arcanedev\Sanitizer\Exceptions\SanitizerMethodAlreadyExistsException;
 
+/**
+ * Class Sanitizer
+ * @package Arcanedev\Sanitizer
+ */
 abstract class Sanitizer implements SanitizerInterface
 {
     /* ------------------------------------------------------------------------------------------------
@@ -41,7 +45,7 @@ abstract class Sanitizer implements SanitizerInterface
      */
     public function setRules($rules)
     {
-        if (! is_null($rules) and ! empty($rules)) {
+        if ( ! is_null($rules) && ! empty($rules)) {
             $this->checkRules($rules);
 
             $this->rules = array_merge($this->rules, $rules);
@@ -95,11 +99,9 @@ abstract class Sanitizer implements SanitizerInterface
 
         // Sanitize each fields by rules
         foreach ($this->rules as $field => $sanitizerRules) {
-            if (! isset($data[$field])) {
-                continue;
+            if (isset($data[$field])) {
+                $this->applySanitizers($data[$field], $sanitizerRules);
             }
-
-            $this->applySanitizers($data[$field], $sanitizerRules);
         }
 
         return $data;
@@ -166,11 +168,9 @@ abstract class Sanitizer implements SanitizerInterface
             );
         }
 
-        $sanitizers = explode('|', $sanitizers);
-
         $sanitizers = array_map(function($sanitizer) {
             return trim($sanitizer);
-        }, $sanitizers);
+        }, explode('|', $sanitizers));
 
         return array_filter($sanitizers);
     }
@@ -219,13 +219,13 @@ abstract class Sanitizer implements SanitizerInterface
      */
     public function register($name, $callback, $override = false)
     {
-        if (! is_callable($callback)) {
+        if ( ! is_callable($callback)) {
             throw new NotCallableException(
                 'The $callback argument of register() must be callable.'
             );
         }
 
-        if ($this->hasCustomSanitizer($name) and $override === false) {
+        if ($this->hasCustomSanitizer($name) && $override === false) {
             throw new SanitizerMethodAlreadyExistsException(
                 'Sanitizer with this name already exists.'
             );
@@ -250,8 +250,8 @@ abstract class Sanitizer implements SanitizerInterface
     private function sanitizerExists($name)
     {
         return $this->hasSanitizerMethod($name)
-            or $this->hasCustomSanitizer($name)
-            or function_exists($name);
+            || $this->hasCustomSanitizer($name)
+            || function_exists($name);
     }
 
     /**
@@ -287,7 +287,7 @@ abstract class Sanitizer implements SanitizerInterface
      */
     private function checkRules($rules)
     {
-        if (! is_array($rules)) {
+        if ( ! is_array($rules)) {
             throw new InvalidSanitizersException(
                 'The sanitizer rules must be an array, ' . gettype($rules) . ' is given'
             );
@@ -324,8 +324,8 @@ abstract class Sanitizer implements SanitizerInterface
         $url = trim($url);
 
         // $url = parse_url($url);
-        if (substr($url, 0, 7) !== 'http://' or substr($url, 0, 8) !== 'https://') {
-            $url = "http://" . $url;
+        if (substr($url, 0, 7) !== 'http://' || substr($url, 0, 8) !== 'https://') {
+            $url = 'http://' . $url;
         }
 
         return filter_var($url, FILTER_SANITIZE_URL);

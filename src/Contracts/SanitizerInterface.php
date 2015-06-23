@@ -1,10 +1,14 @@
 <?php namespace Arcanedev\Sanitizer\Contracts;
 
 use Arcanedev\Sanitizer\Exceptions\InvalidSanitizersException;
+use Arcanedev\Sanitizer\Exceptions\NotCallableException;
 use Arcanedev\Sanitizer\Exceptions\SanitizeMethodNotFoundException;
 use Arcanedev\Sanitizer\Exceptions\SanitizerMethodAlreadyExistsException;
-use Arcanedev\Sanitizer\Exceptions\NotCallableException;
 
+/**
+ * Interface SanitizerInterface
+ * @package Arcanedev\Sanitizer\Contracts
+ */
 interface SanitizerInterface
 {
     /* ------------------------------------------------------------------------------------------------
