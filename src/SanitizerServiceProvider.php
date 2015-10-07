@@ -81,8 +81,6 @@ class SanitizerServiceProvider extends ServiceProvider
      */
     private function registerSanitizer()
     {
-        $this->singleton('arcanedev.sanitizer', function () {
-            return new Sanitizor;
-        });
+        $this->singleton('arcanedev.sanitizer', Sanitizor::class);
     }
 }
