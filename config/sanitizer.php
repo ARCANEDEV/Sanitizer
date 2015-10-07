@@ -11,6 +11,7 @@ return [
         'escape'      => \Arcanedev\Sanitizer\Filters\EscapeFilter::class,
         'format_date' => \Arcanedev\Sanitizer\Filters\FormatDateFilter::class,
         'lowercase'   => \Arcanedev\Sanitizer\Filters\LowercaseFilter::class,
+        'slug'        => \Arcanedev\Sanitizer\Filters\SlugFilter::class,
         'trim'        => \Arcanedev\Sanitizer\Filters\TrimFilter::class,
         'uppercase'   => \Arcanedev\Sanitizer\Filters\UppercaseFilter::class,
         'url'         => \Arcanedev\Sanitizer\Filters\UrlFilter::class,
