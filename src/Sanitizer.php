@@ -1,12 +1,15 @@
 <?php namespace Arcanedev\Sanitizer;
 
 use Arcanedev\Sanitizer\Contracts\SanitizerInterface;
-
 use Arcanedev\Sanitizer\Exceptions\InvalidSanitizersException;
+use Arcanedev\Sanitizer\Exceptions\NotCallableException;
 use Arcanedev\Sanitizer\Exceptions\SanitizeMethodNotFoundException;
 use Arcanedev\Sanitizer\Exceptions\SanitizerMethodAlreadyExistsException;
-use Arcanedev\Sanitizer\Exceptions\SanitizerNotCallableException;
 
+/**
+ * Class Sanitizer
+ * @package Arcanedev\Sanitizer
+ */
 abstract class Sanitizer implements SanitizerInterface
 {
     /* ------------------------------------------------------------------------------------------------
@@ -32,19 +35,9 @@ abstract class Sanitizer implements SanitizerInterface
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * Get sanitizer rules
-     *
-     * @return array
-     */
-    public function getRules()
-    {
-        return $this->rules;
-    }
-
-    /**
      * Set sanitizer rules
      *
-     * @param array $rules
+     * @param  array|null $rules
      *
      * @throws InvalidSanitizersException
      *
@@ -52,29 +45,19 @@ abstract class Sanitizer implements SanitizerInterface
      */
     public function setRules($rules)
     {
-        if ( ! is_array($rules) ) {
-            throw new InvalidSanitizersException('The sanitizer rules must be an array, ' . gettype($rules) . ' is given');
-        }
+        if ( ! is_null($rules) && ! empty($rules)) {
+            $this->checkRules($rules);
 
-        $this->rules = array_merge($this->rules, $rules);
+            $this->rules = array_merge($this->rules, $rules);
+        }
 
         return $this;
     }
 
     /**
-     * Get Sanitizers
-     *
-     * @return array
-     */
-    public function getSanitizers()
-    {
-        return $this->sanitizers;
-    }
-
-    /**
      * Get sanitizer method name
      *
-     * @param string $name
+     * @param  string $name
      *
      * @return string
      */
@@ -86,7 +69,7 @@ abstract class Sanitizer implements SanitizerInterface
     /**
      * Get sanitizer method
      *
-     * @param string $sanitizer
+     * @param  string $sanitizer
      *
      * @return array
      */
@@ -102,8 +85,8 @@ abstract class Sanitizer implements SanitizerInterface
     /**
      * Sanitize data
      *
-     * @param array      $data
-     * @param array|null $rules
+     * @param  array      $data
+     * @param  array|null $rules
      *
      * @throws InvalidSanitizersException
      * @throws SanitizeMethodNotFoundException
@@ -112,34 +95,23 @@ abstract class Sanitizer implements SanitizerInterface
      */
     public function sanitize(array $data, $rules = null)
     {
-        if ( ! is_null($rules) and ! empty($rules) ) {
-            $this->setRules($rules);
-        }
+        $this->setRules($rules);
 
-        $this->sanitizeByRules($data);
+        // Sanitize each fields by rules
+        foreach ($this->rules as $field => $sanitizerRules) {
+            if (isset($data[$field])) {
+                $this->applySanitizers($data[$field], $sanitizerRules);
+            }
+        }
 
         return $data;
     }
 
     /**
-     * Sanitize each fields by rules
-     *
-     * @param array $data
-     */
-    private function sanitizeByRules(&$data)
-    {
-        foreach ($this->rules as $field => $sanitizerRules) {
-            if ( isset($data[$field]) ) {
-                $this->applySanitizers($data[$field], $sanitizerRules);
-            }
-        }
-    }
-
-    /**
      * Apply Sanitizers
      *
-     * @param mixed $value
-     * @param array $sanitizers
+     * @param  mixed $value
+     * @param  array $sanitizers
      *
      * @throws InvalidSanitizersException
      * @throws SanitizeMethodNotFoundException
@@ -158,7 +130,7 @@ abstract class Sanitizer implements SanitizerInterface
     /**
      * Convert sanitizer rules to array
      *
-     * @param string|array $sanitizers
+     * @param  string|array $sanitizers
      *
      * @throws InvalidSanitizersException
      *
@@ -166,19 +138,23 @@ abstract class Sanitizer implements SanitizerInterface
      */
     private function splitSanitizers($sanitizers)
     {
-        if ( is_array($sanitizers) ) {
+        if (is_array($sanitizers)) {
             return $sanitizers;
         }
 
-        if ( is_string($sanitizers) ) {
+        if (is_string($sanitizers)) {
             return $this->splitStringSanitizers($sanitizers);
         }
 
-        throw new InvalidSanitizersException('Sanitizer rules must be an array or string.');
+        throw new InvalidSanitizersException(
+            'Sanitizer rules must be an array or string.'
+        );
     }
 
     /**
-     * @param $sanitizers
+     * Split string Sanitizers to array
+     *
+     * @param  string $sanitizers
      *
      * @throws InvalidSanitizersException
      *
@@ -186,15 +162,15 @@ abstract class Sanitizer implements SanitizerInterface
      */
     private function splitStringSanitizers($sanitizers)
     {
-        if ( empty($sanitizers) ) {
-            throw new InvalidSanitizersException("Sanitizer rules mustn't be an empty string.");
+        if (empty($sanitizers)) {
+            throw new InvalidSanitizersException(
+                'Sanitizer rules must not be an empty string.'
+            );
         }
-
-        $sanitizers = explode('|', $sanitizers);
 
         $sanitizers = array_map(function($sanitizer) {
             return trim($sanitizer);
-        }, $sanitizers);
+        }, explode('|', $sanitizers));
 
         return array_filter($sanitizers);
     }
@@ -203,8 +179,8 @@ abstract class Sanitizer implements SanitizerInterface
     /**
      * Apply Sanitizer
      *
-     * @param mixed $value
-     * @param string $sanitizer
+     * @param  mixed $value
+     * @param  string $sanitizer
      *
      * @throws SanitizeMethodNotFoundException
      *
@@ -212,15 +188,17 @@ abstract class Sanitizer implements SanitizerInterface
      */
     private function applySanitizer($value, $sanitizer)
     {
-        if ( ! $this->sanitizerExists($sanitizer) ) {
-            throw new SanitizeMethodNotFoundException("Sanitize Method [" . $sanitizer . "] not found !");
+        if (! $this->sanitizerExists($sanitizer)) {
+            throw new SanitizeMethodNotFoundException(
+                "Sanitize Method [$sanitizer] not found !"
+            );
         }
 
         // If a custom sanitizer is registered on the subclass, then let's trigger that instead.
-        if ( $this->hasSanitizerMethod($sanitizer) ) {
+        if ($this->hasSanitizerMethod($sanitizer)) {
             $sanitizer = $this->getSanitizerMethod($sanitizer);
         }
-        elseif ( $this->hasCustomSanitizer($sanitizer) ) {
+        elseif ($this->hasCustomSanitizer($sanitizer)) {
             $sanitizer = $this->sanitizers[$sanitizer];
         }
 
@@ -230,23 +208,27 @@ abstract class Sanitizer implements SanitizerInterface
     /**
      * Register a custom sanitizer
      *
-     * @param string   $name     Name of the sanitizer
-     * @param callable $callback
-     * @param bool     $override Override sanitizer if it already exists
+     * @param  string   $name     Name of the sanitizer
+     * @param  Callable $callback
+     * @param  bool     $override Override sanitizer if it already exists
      *
-     * @throws SanitizerNotCallableException
+     * @throws NotCallableException
      * @throws SanitizerMethodAlreadyExistsException
      *
      * @return Sanitizer
      */
     public function register($name, $callback, $override = false)
     {
-        if ( ! is_callable($callback) ) {
-            throw new SanitizerNotCallableException('The $callback argument of register() must be callable.');
+        if ( ! is_callable($callback)) {
+            throw new NotCallableException(
+                'The $callback argument of register() must be callable.'
+            );
         }
 
-        if ( $this->hasCustomSanitizer($name) and $override === false ) {
-            throw new SanitizerMethodAlreadyExistsException('Sanitizer with this name already exists.');
+        if ($this->hasCustomSanitizer($name) && $override === false) {
+            throw new SanitizerMethodAlreadyExistsException(
+                'Sanitizer with this name already exists.'
+            );
         }
 
         $this->sanitizers[$name] = $callback;
@@ -259,43 +241,23 @@ abstract class Sanitizer implements SanitizerInterface
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * Check has sanitizer rules
-     *
-     * @return bool
-     */
-    public function hasRules()
-    {
-        return count($this->getRules()) > 0;
-    }
-
-    /**
-     * Check has custom sanitizers
-     *
-     * @return bool
-     */
-    public function hasSanitizers()
-    {
-        return count($this->getSanitizers()) > 0;
-    }
-
-    /**
      * Check if a sanitizer exists
      *
-     * @param string $name
+     * @param  string $name
      *
      * @return bool
      */
     private function sanitizerExists($name)
     {
         return $this->hasSanitizerMethod($name)
-            or $this->hasCustomSanitizer($name)
-            or function_exists($name);
+            || $this->hasCustomSanitizer($name)
+            || function_exists($name);
     }
 
     /**
      * Check if has a custom sanitizer method
      *
-     * @param string $name
+     * @param  string $name
      *
      * @return bool
      */
@@ -307,13 +269,29 @@ abstract class Sanitizer implements SanitizerInterface
     /**
      * Check if has a custom sanitizer closure
      *
-     * @param string $name
+     * @param  string $name
      *
      * @return bool
      */
     private function hasCustomSanitizer($name)
     {
-        return array_key_exists($name, $this->getSanitizers());
+        return array_key_exists($name, $this->sanitizers);
+    }
+
+    /**
+     * Check Rules
+     *
+     * @param  array $rules
+     *
+     * @throws InvalidSanitizersException
+     */
+    private function checkRules($rules)
+    {
+        if ( ! is_array($rules)) {
+            throw new InvalidSanitizersException(
+                'The sanitizer rules must be an array, ' . gettype($rules) . ' is given'
+            );
+        }
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -337,7 +315,7 @@ abstract class Sanitizer implements SanitizerInterface
     /**
      * Sanitize an url.
      *
-     * @param string $url
+     * @param  string $url
      *
      * @return string
      */
@@ -346,8 +324,8 @@ abstract class Sanitizer implements SanitizerInterface
         $url = trim($url);
 
         // $url = parse_url($url);
-        if ( substr($url, 0, 7) !== "http://" or substr($url, 0, 8) !== "https://" ) {
-            $url = "http://" . $url;
+        if (substr($url, 0, 7) !== 'http://' || substr($url, 0, 8) !== 'https://') {
+            $url = 'http://' . $url;
         }
 
         return filter_var($url, FILTER_SANITIZE_URL);

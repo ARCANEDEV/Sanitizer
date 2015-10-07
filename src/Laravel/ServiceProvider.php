@@ -1,8 +1,13 @@
 <?php namespace Arcanedev\Sanitizer\Laravel;
 
 use Arcanedev\Sanitizer\Sanitizor;
+use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 
-class ServiceProvider extends \Illuminate\Support\ServiceProvider
+/**
+ * Class ServiceProvider
+ * @package Arcanedev\Sanitizer\Laravel
+ */
+class ServiceProvider extends IlluminateServiceProvider
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
@@ -26,7 +31,9 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     public function boot()
     {
-        $this->package('arcanedev/sanitizer', 'sanitizer', __DIR__ . '/..');
+        $path = realpath(__DIR__ . '/..');
+
+        $this->package('arcanedev/sanitizer', 'sanitizer', $path);
     }
 
     /**
@@ -46,9 +53,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     public function provides()
     {
-        return [
-            'arcanedev.sanitizer'
-        ];
+        return ['arcanedev.sanitizer'];
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -62,7 +67,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     private function registerHelpers()
     {
-        $this->app->bindShared('arcanedev.sanitizer', function ($app) {
+        $this->app->bindShared('arcanedev.sanitizer', function () {
             return new Sanitizor;
         });
     }
