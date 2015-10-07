@@ -6,8 +6,10 @@ use Arcanedev\Sanitizer\Exceptions\SanitizeMethodNotFoundException;
 use Arcanedev\Sanitizer\Exceptions\SanitizerMethodAlreadyExistsException;
 
 /**
- * Interface SanitizerInterface
- * @package Arcanedev\Sanitizer\Contracts
+ * Interface  SanitizerInterface
+ *
+ * @package   Arcanedev\Sanitizer\Contracts
+ * @author    ARCANEDEV <arcanedev.maroc@gmail.com>
  */
 interface SanitizerInterface
 {
