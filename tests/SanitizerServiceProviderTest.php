@@ -1,22 +1,21 @@
 <?php namespace Arcanedev\Sanitizer\Tests;
 
-use Arcanedev\Sanitizer\Sanitizer;
-use Arcanedev\Sanitizer\Sanitizor;
+use Arcanedev\Sanitizer\SanitizerServiceProvider;
 
 /**
- * Class     SanitizorTest
+ * Class     SanitizerServiceProviderTest
  *
  * @package  Arcanedev\Sanitizer\Tests
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class SanitizorTest extends TestCase
+class SanitizerServiceProviderTest extends LaravelTestCase
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
      | ------------------------------------------------------------------------------------------------
      */
-    /** @var Sanitizor */
-    private $sanitizor;
+    /** @var SanitizerServiceProvider */
+    private $provider;
 
     /* ------------------------------------------------------------------------------------------------
      |  Main Functions
@@ -26,14 +25,14 @@ class SanitizorTest extends TestCase
     {
         parent::setUp();
 
-        $this->sanitizor = new Sanitizor;
+        $this->provider = $this->app->getProvider(SanitizerServiceProvider::class);
     }
 
     public function tearDown()
     {
         parent::tearDown();
 
-        unset($this->sanitizor);
+        unset($this->provider);
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -41,33 +40,17 @@ class SanitizorTest extends TestCase
      | ------------------------------------------------------------------------------------------------
      */
     /** @test */
-    public function it_can_be_instantiated()
+    public function it_can_get_what_it_provides()
     {
-        $this->assertInstanceOf(Sanitizor::class, $this->sanitizor);
-        $this->assertInstanceOf(Sanitizer::class, $this->sanitizor);
+        // This is for 100% code converge
+        $this->assertEquals([
+            'arcanedev.sanitizer'
+        ], $this->provider->provides());
     }
 
     /** @test */
-    public function it_can_make_sanitizer()
+    public function it_can_get_base_path()
     {
-        $rules = [
-            'lastname'  => 'trim|strtolower|ucfirst',
-            'firstname' => 'trim|strtoupper',
-            'email'     => 'trim|strtolower'
-        ];
-
-        $data = [
-            'lastname'  => 'john',
-            'firstname' => 'doe',
-            'email'     => 'John.DOE@EmAiL.com'
-        ];
-
-        $this->sanitizor = Sanitizor::make($data, $rules);
-
-        $this->assertEquals([
-            'lastname' => "John",
-            'firstname' => "DOE",
-            'email' => "john.doe@email.com",
-        ], $this->sanitizor);
+        $this->assertTrue(is_dir($this->provider->getBasePath()));
     }
 }

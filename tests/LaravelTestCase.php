@@ -1,46 +1,44 @@
 <?php namespace Arcanedev\Sanitizer\Tests;
 
-abstract class LaravelTestCase extends \Orchestra\Testbench\TestCase
+use Orchestra\Testbench\TestCase as BaseTestCase;
+
+/**
+ * Class     LaravelTestCase
+ *
+ * @package  Arcanedev\Sanitizer\Tests
+ * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
+ */
+abstract class LaravelTestCase extends BaseTestCase
 {
-    /* ------------------------------------------------------------------------------------------------
-     |  Main Functions
-     | ------------------------------------------------------------------------------------------------
-     */
-    public function setUp()
-    {
-        parent::setUp();
-    }
-
-    public function tearDown()
-    {
-        parent::tearDown();
-    }
-
     /* ------------------------------------------------------------------------------------------------
      |  Other Functions
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * Register Service Providers
+     * Get package providers.
+     *
+     * @param  \Illuminate\Foundation\Application  $app
      *
      * @return array
      */
-    protected function getPackageProviders()
+    protected function getPackageProviders($app)
     {
         return [
-            'Arcanedev\Sanitizer\Laravel\ServiceProvider'
+            \Arcanedev\Sanitizer\SanitizerServiceProvider::class
         ];
     }
 
     /**
-     * Register Aliases
+     * Get package aliases.
+     *
+     * @param  \Illuminate\Foundation\Application  $app
      *
      * @return array
      */
-    protected function getPackageAliases()
+    protected function getPackageAliases($app)
     {
         return [
-            'Sanitizer' => 'Arcanedev\Sanitizer\Laravel\Facade'
+            'Sanitizer' => \Arcanedev\Sanitizer\Facades\Sanitizer::class
         ];
     }
 
@@ -48,9 +46,9 @@ abstract class LaravelTestCase extends \Orchestra\Testbench\TestCase
      * Define environment setup.
      *
      * @param  \Illuminate\Foundation\Application  $app
-     * @return void
      */
     protected function getEnvironmentSetUp($app)
     {
+        //
     }
 }

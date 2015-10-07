@@ -1,24 +1,16 @@
 <?php namespace Arcanedev\Sanitizer\Tests\Laravel;
 
-use Arcanedev\Sanitizer\Laravel\Facade as Sanitizer;
+use Arcanedev\Sanitizer\Facades\Sanitizer;
 use Arcanedev\Sanitizer\Tests\LaravelTestCase;
 
+/**
+ * Class     FacadeTest
+ *
+ * @package  Arcanedev\Sanitizer\Tests\Laravel
+ * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
+ */
 class FacadeTest extends LaravelTestCase
 {
-    /* ------------------------------------------------------------------------------------------------
-     |  Main Functions
-     | ------------------------------------------------------------------------------------------------
-     */
-    public function setUp()
-    {
-        parent::setUp();
-    }
-
-    public function tearDown()
-    {
-        parent::tearDown();
-    }
-
     /* ------------------------------------------------------------------------------------------------
      |  Test Functions
      | ------------------------------------------------------------------------------------------------
@@ -26,7 +18,7 @@ class FacadeTest extends LaravelTestCase
     /**
      * @test
      */
-    public function testCanMakeSanitizer()
+    public function it_can_make_sanitizer()
     {
         $rules = [
             'lastname'  => 'trim|strtolower|ucfirst',
