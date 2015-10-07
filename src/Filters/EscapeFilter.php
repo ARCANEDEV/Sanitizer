@@ -17,10 +17,10 @@ class EscapeFilter implements Filterable
     /**
      * Remove HTML tags and encode special characters from the given string.
      *
-     * @param  string  $value
-     * @param  array   $options
+     * @param  mixed  $value
+     * @param  array  $options
      *
-     * @return string
+     * @return string|mixed
      */
     public function filter($value, array $options = [])
     {

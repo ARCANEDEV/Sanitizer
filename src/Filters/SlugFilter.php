@@ -17,13 +17,17 @@ class SlugFilter implements Filterable
     /**
      * Filter the value.
      *
-     * @param  string $value
+     * @param  mixed  $value
      * @param  array  $options
      *
-     * @return string
+     * @return string|mixed
      */
     public function filter($value, array $options = [])
     {
+        if ( ! is_string($value)) {
+            return $value;
+        }
+
         return str_slug($value);
     }
 }

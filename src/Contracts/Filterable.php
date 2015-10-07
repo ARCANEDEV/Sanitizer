@@ -15,10 +15,10 @@ interface Filterable
     /**
      * Filter the value.
      *
-     * @param  string  $value
-     * @param  array   $options
+     * @param  mixed  $value
+     * @param  array  $options
      *
-     * @return string
+     * @return mixed
      */
     public function filter($value, array $options = []);
 }

@@ -20,7 +20,7 @@ class EmailFilter implements Filterable
      * @param  mixed  $value
      * @param  array  $options
      *
-     * @return mixed
+     * @return string|mixed
      */
     public function filter($value, array $options = [])
     {
