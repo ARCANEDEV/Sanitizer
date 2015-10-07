@@ -67,7 +67,10 @@ class Factory
     public function extend($name, $filter)
     {
         $this->checkName($name);
-        $this->isFilterable($filter);
+
+        if ( ! $filter instanceof Closure) {
+            $this->isFilterable($filter);
+        }
 
         $this->filters[$name] = $filter;
     }
@@ -101,10 +104,7 @@ class Factory
      */
     private function isFilterable($filter)
     {
-        if ($filter instanceof Closure) {
-            return;
-        }
-        elseif (is_string($filter) && ! class_exists($filter)) {
+        if (is_string($filter) && ! class_exists($filter)) {
             throw new Exceptions\InvalidFilterException(
                 "The [$filter] class does not exits."
             );
