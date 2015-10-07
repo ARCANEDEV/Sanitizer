@@ -1,9 +1,9 @@
 <?php namespace Arcanedev\Sanitizer\Exceptions;
 
 /**
- * Class     SanitizeMethodNotFoundException
+ * Class     FilterNotFoundException
  *
  * @package  Arcanedev\Sanitizer\Exceptions
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class SanitizeMethodNotFoundException extends SanitizerException {}
+class FilterNotFoundException extends SanitizerException {}
