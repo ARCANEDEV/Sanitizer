@@ -15,27 +15,23 @@ class FacadeTest extends LaravelTestCase
      |  Test Functions
      | ------------------------------------------------------------------------------------------------
      */
-    /**
-     * @test
-     */
+    /** @test */
     public function it_can_make_sanitizer()
     {
-        $rules = [
-            'lastname'  => 'trim|strtolower|ucfirst',
-            'firstname' => 'trim|strtoupper',
-            'email'     => 'trim|strtolower'
-        ];
-
-        $data = [
-            'lastname'  => 'john',
-            'firstname' => 'doe',
-            'email'     => 'John.DOE@EmAiL.com'
-        ];
+        $sanitized = Sanitizer::make([
+            'last_name'  => 'john',
+            'first_name' => 'doe',
+            'email'      => 'John.DOE@EmAiL.com'
+        ], [
+            'last_name'  => 'trim|uppercase',
+            'first_name' => 'trim|capitalize',
+            'email'      => 'email'
+        ]);
 
         $this->assertEquals([
-            'lastname' => "John",
-            'firstname' => "DOE",
-            'email' => "john.doe@email.com",
-        ], Sanitizer::make($data, $rules));
+            'last_name'  => "JOHN",
+            'first_name' => "Doe",
+            'email'      => "john.doe@email.com",
+        ], $sanitized);
     }
 }

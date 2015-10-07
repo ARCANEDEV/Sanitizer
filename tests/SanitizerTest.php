@@ -1,8 +1,5 @@
 <?php namespace Arcanedev\Sanitizer\Tests;
 
-use Arcanedev\Sanitizer\Tests\Stubs\EmptySanitizer;
-use Arcanedev\Sanitizer\Tests\Stubs\UserSanitizer;
-
 use Arcanedev\Sanitizer\Sanitizer;
 
 /**
@@ -17,10 +14,8 @@ class SanitizerTest extends TestCase
      |  Properties
      | ------------------------------------------------------------------------------------------------
      */
-    /**
-     * @var Sanitizer
-     */
-    protected $sanitizer;
+    /** @var Sanitizer  */
+    private $sanitizer;
 
     /* ------------------------------------------------------------------------------------------------
      |  Main Functions
@@ -28,7 +23,16 @@ class SanitizerTest extends TestCase
      */
     public function setUp()
     {
-        $this->sanitizer = new UserSanitizer;
+        parent::setUp();
+
+        $this->sanitizer = new Sanitizer($this->filters);
+    }
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        unset($this->sanitizer);
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -42,31 +46,47 @@ class SanitizerTest extends TestCase
     }
 
     /** @test */
-    public function it_can_set_sanitizer_string_rules()
+    public function it_can_make_sanitizer()
     {
-        $this->sanitizer->setRules([
-            'email' => 'trim|strtolower'
-        ]);
-
         $sanitized = $this->sanitizer->sanitize([
-            'email' => 'FOO@BAR.COM '
+            'last_name'  => 'john  ',
+            'first_name' => '  doe',
+            'email'      => 'John.DOE@EmAiL.com  '
+        ], [
+            'last_name'  => 'trim|uppercase',
+            'first_name' => 'trim|capitalize',
+            'email'      => 'email'
         ]);
 
         $this->assertEquals([
-            'email' => 'foo@bar.com'
+            'last_name'  => 'JOHN',
+            'first_name' => 'Doe',
+            'email'      => 'john.doe@email.com',
+        ], $sanitized);
+    }
+
+    /** @test */
+    public function it_can_set_sanitizer_rules()
+    {
+        $sanitized = $this->sanitizer
+            ->setRules(['user_email' => 'email'])
+            ->sanitize([
+                'user_email' => 'FOO@BAR.COM '
+            ]);
+
+        $this->assertEquals([
+            'user_email' => 'foo@bar.com'
         ], $sanitized);
     }
 
     /** @test */
     public function it_can_skip_rules_if_data_not_exists()
     {
-        $this->sanitizer->setRules([
-            'email' => 'trim|strtolower',
-            'url'   => 'url',
-        ]);
-
         $sanitized = $this->sanitizer->sanitize([
             'email' => 'FOO@BAR.COM '
+        ],[
+            'email' => 'email',
+            'url'   => 'url',
         ]);
 
         $this->assertEquals([
@@ -77,93 +97,15 @@ class SanitizerTest extends TestCase
     /**
      * @test
      *
-     * @expectedException  \Arcanedev\Sanitizer\Exceptions\InvalidSanitizersException
+     * @expectedException  \Arcanedev\Sanitizer\Exceptions\InvalidFilterException
      */
-    public function it_must_throw_invalid_sanitizers_exception_on_empty_string()
+    public function it_must_throw_invalid_filter_exception_on_empty_filters()
     {
-        $data = [
+        $this->sanitizer->sanitize([
             'email' => 'FOO@BAR.COM '
-        ];
-
-        $rules = [
+        ],[
             'email' => '',
-        ];
-
-        $this->sanitizer->sanitize($data, $rules);
-    }
-
-    /** @test */
-    public function it_can_set_sanitizer_array_rules()
-    {
-        $this->sanitizer->setRules([
-            'email' => ['trim', 'strtolower'],
         ]);
-
-        $sanitized = $this->sanitizer->sanitize([
-            'email' => 'FOO@BAR.COM '
-        ]);
-
-        $this->assertEquals([
-            'email' => 'foo@bar.com'
-        ], $sanitized);
-    }
-
-    /** @test */
-    public function it_can_sanitize_by_php_functions()
-    {
-        $data = [
-            'email' => ' hello@GMAIL.com  '
-        ];
-
-        $rules = [
-            'email' => 'trim|strtolower',
-        ];
-
-        $data = $this->sanitizer->sanitize($data, $rules);
-
-        $this->assertEquals(['email' => 'hello@gmail.com'], $data);
-    }
-
-    /** @test */
-    public function it_can_sanitize_by_class_methods_one()
-    {
-        $data = [
-            'message' => 'hElLo !'
-        ];
-
-        $rules = [
-            'message' => 'helloMessage',
-        ];
-
-        $this->assertEquals(['message' => 'Hello !'], $this->sanitizer->sanitize($data, $rules));
-    }
-
-    /** @test */
-    public function it_can_sanitize_by_class_methods_two()
-    {
-        $data = [
-            'email' => 'hello@GMAIL.com'
-        ];
-
-        $rules = [
-            'email' => 'email',
-        ];
-
-        $this->assertEquals(['email' => 'hello@gmail.com'], $this->sanitizer->sanitize($data, $rules));
-    }
-
-    /** @test */
-    public function it_can_sanitize_by_class_methods_three()
-    {
-        $data = [
-            'web' => 'www.inter net.free ¨ù'
-        ];
-
-        $rules = [
-            'web' => 'url',
-        ];
-
-        $this->assertEquals(['web' => 'http://www.internet.free'], $this->sanitizer->sanitize($data, $rules));
     }
 
     /** @test */
@@ -187,73 +129,16 @@ class SanitizerTest extends TestCase
     /**
      * @test
      *
-     * @expectedException  \Arcanedev\Sanitizer\Exceptions\InvalidSanitizersException
-     */
-    public function it_must_throw_invalid_sanitizers_exception()
-    {
-        $data = [
-            'email' => ' hello@GMAIL.com  '
-        ];
-
-        $this->sanitizer->sanitize($data, 'trim|ucfirst');
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException  \Arcanedev\Sanitizer\Exceptions\InvalidSanitizersException
-     */
-    public function it_must_throw_invalid_sanitizers_exception_on_empty()
-    {
-        $data  = [
-            'foo' => 'bar'
-        ];
-
-        $rules = [
-            'foo' => true
-        ];
-
-        $sanitizer = new EmptySanitizer;
-        $sanitizer->sanitize($data, $rules);
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException  \Arcanedev\Sanitizer\Exceptions\SanitizeMethodNotFoundException
+     * @expectedException         \Arcanedev\Sanitizer\Exceptions\FilterNotFoundException
+     * @expectedExceptionMessage  No filter found by the name of sterilize
      */
     public function it_must_throw_sanitize_method_not_found()
     {
-        $data = [
+        $this->sanitizer->sanitize([
             'email' => ' hello@GMAIL.com  '
-        ];
-
-        $rule = [
-            'email' => 'lastname',
-        ];
-
-        $this->sanitizer->sanitize($data, $rule);
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException  \Arcanedev\Sanitizer\Exceptions\SanitizerMethodAlreadyExistsException
-     */
-    public function it_must_throw_method_already_exists()
-    {
-        $this->registerSlugSanitizer();
-        $this->registerSlugSanitizer();
-    }
-
-    /**
-     * @test
-     *
-     * @expectedException  \Arcanedev\Sanitizer\Exceptions\NotCallableException
-     */
-    public function it_must_throw_not_callable_exception()
-    {
-        $this->sanitizer->register('foo', 'bar');
+        ], [
+            'email' => 'sterilize',
+        ]);
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -265,8 +150,10 @@ class SanitizerTest extends TestCase
      */
     private function registerSlugSanitizer()
     {
-        $this->sanitizer->register('slug', function ($value) {
-            return str_replace(' ', '-', strtolower(trim($value)));
-        });
+        $this->sanitizer->setFilters([
+            'slug'  => function ($value) {
+                return str_replace(' ', '-', strtolower(trim($value)));
+            }
+        ]);
     }
 }

@@ -1,10 +1,5 @@
 <?php namespace Arcanedev\Sanitizer\Contracts;
 
-use Arcanedev\Sanitizer\Exceptions\InvalidSanitizersException;
-use Arcanedev\Sanitizer\Exceptions\NotCallableException;
-use Arcanedev\Sanitizer\Exceptions\SanitizeMethodNotFoundException;
-use Arcanedev\Sanitizer\Exceptions\SanitizerMethodAlreadyExistsException;
-
 /**
  * Interface  SanitizerInterface
  *
@@ -18,44 +13,35 @@ interface SanitizerInterface
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * Set sanitizer rules
+     * Set filters.
      *
-     * @param  array $rules
+     * @param  array  $filters
      *
-     * @throws InvalidSanitizersException
-     *
-     * @return SanitizerInterface
+     * @return self
      */
-    public function setRules($rules);
+    public function setFilters(array $filters);
+
+    /**
+     * Set rules.
+     *
+     * @param  array  $rules
+     *
+     * @return self
+     */
+    public function setRules(array $rules);
 
     /* ------------------------------------------------------------------------------------------------
-     |  Functions
+     |  Main Functions
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * Sanitize data
+     * Sanitize the given data.
      *
-     * @param  array      $data
-     * @param  array|null $rules
-     *
-     * @throws InvalidSanitizersException
-     * @throws SanitizeMethodNotFoundException
+     * @param  array  $data
+     * @param  array  $rules
+     * @param  array  $filters
      *
      * @return array
      */
-    public function sanitize(array $data, $rules = null);
-
-    /**
-     * Register a custom sanitizer
-     *
-     * @param  string   $name     Name of the sanitizer
-     * @param  callable $callback
-     * @param  bool     $override Override sanitizer if it already exists
-     *
-     * @throws NotCallableException
-     * @throws SanitizerMethodAlreadyExistsException
-     *
-     * @return SanitizerInterface
-     */
-    public function register($name, $callback, $override = false);
+    public function sanitize(array $data, array $rules = [], array $filters = []);
 }
