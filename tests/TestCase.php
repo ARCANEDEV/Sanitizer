@@ -1,13 +1,15 @@
 <?php namespace Arcanedev\Sanitizer\Tests;
 
+use PHPUnit_Framework_TestCase as BaseTestCase;
 
-abstract class TestCase extends \PHPUnit_Framework_TestCase
+/**
+ * Class     TestCase
+ *
+ * @package  Arcanedev\Sanitizer\Tests
+ * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
+ */
+abstract class TestCase extends BaseTestCase
 {
-    /* ------------------------------------------------------------------------------------------------
-     |  Properties
-     | ------------------------------------------------------------------------------------------------
-     */
-
     /* ------------------------------------------------------------------------------------------------
      |  Main Functions
      | ------------------------------------------------------------------------------------------------

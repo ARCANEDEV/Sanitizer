@@ -1,15 +1,27 @@
-Sanitizer Helper [![Packagist License](http://img.shields.io/packagist/l/arcanedev/sanitizer.svg?style=flat-square)](https://github.com/ARCANEDEV/Sanitizer/blob/master/LICENSE)
+Sanitizer Helper [![For PHP][badge_php]](https://github.com/ARCANEDEV/Sanitizer) [![For Laravel 5.x/4.2][badge_laravel]](https://github.com/ARCANEDEV/Sanitizer) [![Packagist License][badge_license]](https://github.com/ARCANEDEV/Sanitizer/blob/master/LICENSE.md)
 ==============
-[![Travis Status](http://img.shields.io/travis/ARCANEDEV/Sanitizer.svg?style=flat-square)](https://travis-ci.org/ARCANEDEV/Sanitizer)
-[![Coverage Status](https://img.shields.io/scrutinizer/coverage/g/ARCANEDEV/Sanitizer.svg?style=flat-square)](https://scrutinizer-ci.com/g/ARCANEDEV/Sanitizer/?branch=master)
-[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/ARCANEDEV/Sanitizer.svg?style=flat-square)](https://scrutinizer-ci.com/g/ARCANEDEV/Sanitizer/?branch=master)
-[![Github Release](http://img.shields.io/github/release/ARCANEDEV/Sanitizer.svg?style=flat-square)](https://github.com/ARCANEDEV/Sanitizer/releases)
-[![Packagist Downloads](https://img.shields.io/packagist/dt/arcanedev/sanitizer.svg?style=flat-square)](https://packagist.org/packages/arcanedev/sanitizer)
-[![Github Issues](http://img.shields.io/github/issues/ARCANEDEV/Sanitizer.svg?style=flat-square)](https://github.com/ARCANEDEV/Sanitizer/issues)
+[![Travis Status][badge_build]](https://travis-ci.org/ARCANEDEV/Sanitizer)
+[![Coverage Status][badge_coverage]](https://scrutinizer-ci.com/g/ARCANEDEV/Sanitizer/?branch=master)
+[![Scrutinizer Code Quality][badge_quality]](https://scrutinizer-ci.com/g/ARCANEDEV/Sanitizer/?branch=master)
+[![Github Issues][badge_issues]](https://github.com/ARCANEDEV/Sanitizer/issues)
+[![Packagist Release][badge_release]](https://packagist.org/packages/arcanedev/sanitizer)
+[![Packagist Downloads][badge_downloads]](https://packagist.org/packages/arcanedev/sanitizer)
 
-This library helps you to sanitize your data.
+[badge_php]:       https://img.shields.io/badge/PHP-Framework%20agnostic-4F5B93.svg?style=flat-square
+[badge_laravel]:   https://img.shields.io/badge/Laravel%20Supported-5.x|4.2-orange.svg?style=flat-square
+[badge_license]:   http://img.shields.io/packagist/l/arcanedev/sanitizer.svg?style=flat-square
+[badge_build]:     http://img.shields.io/travis/ARCANEDEV/Sanitizer.svg?style=flat-square
+[badge_coverage]:  https://img.shields.io/scrutinizer/coverage/g/ARCANEDEV/Sanitizer.svg?style=flat-square
+[badge_quality]:   https://img.shields.io/scrutinizer/g/ARCANEDEV/Sanitizer.svg?style=flat-square
+[badge_issues]:    http://img.shields.io/github/issues/ARCANEDEV/Sanitizer.svg?style=flat-square
+[badge_release]:   https://img.shields.io/packagist/v/arcanedev/sanitizer.svg?style=flat-square
+[badge_downloads]: https://img.shields.io/packagist/dt/arcanedev/sanitizer.svg?style=flat-square
 
 *By [ARCANEDEV&copy;](http://www.arcanedev.net/)*
+
+A Sanitizer Helper that helps you to sanitize your inputs data.
+
+Feel free to check out the [releases](https://github.com/ARCANEDEV/Sanitizer/releases), [license](LICENSE.md), and [contribution guidelines](CONTRIBUTING.md).
 
 ### Requirements
 
@@ -24,7 +36,7 @@ You can install the package via [Composer](https://getcomposer.org/). Add this t
 ```json
 {
     "require": {
-        "arcanedev/sanitizer": "~1.0"
+        "arcanedev/sanitizer": "~2.0"
     }
 }
 ```
@@ -32,12 +44,13 @@ You can install the package via [Composer](https://getcomposer.org/). Add this t
 And install it via `composer install` or `composer update`.
 
 ### Laravel
-Once the package is installed, you can register the service provider in `app/config/app.php` in the `providers` array:
+
+Once the package is installed, you can register the service provider in `config/app.php` in the `providers` array:
 
 ```php
 'providers' => [
     ...
-    'Arcanedev\Sanitizer\Laravel\ServiceProvider',
+    'Arcanedev\Sanitizer\SanitizerServiceProvider',
 ],
 ```
 
@@ -46,7 +59,7 @@ And the facade in the `aliases` array:
 ```php
 'aliases' => [
     ...
-    'Sanitizor' => 'Arcanedev\Sanitizer\Laravel\Facade',
+    'Sanitizer' => 'Arcanedev\Sanitizer\Facades\Sanitizer',
 ],
 ```
 
@@ -98,27 +111,25 @@ $data = [
     'email'     => 'John.DOE@EmAiL.com'
 ];
 
-$sanitizor = Sanitizor::make($data, $rules);
+$sanitized = Sanitizor::make($data, $rules);
 
-var_dump($sanitizor);
+var_dump($sanitized);
 ```
 
 Check the `examples` or `tests` folder to learn some tricks.
-
-## Contributing
-
-If you have any suggestions or improvements feel free to create an issue or create a Pull Request.
 
 ## TODO
 
   - [ ] Documentation
   - [ ] More Examples
-  - [x] More tests and code coverage
-  - [x] Laravel support (v4.2)
-  - [ ] Laravel support (v5.0)
   - [ ] Registering sanitizers in IoC Container (only Laravel)
-  - [ ] Refactoring
 
-## License
+## DONE
 
-The Sanitizer Helper is open-sourced software licensed under the [MIT license](https://github.com/ARCANEDEV/Sanitizer/blob/master/LICENSE)
+  - [x] Laravel v4.2 supported
+  - [x] Laravel v5.0 supported
+  - [x] Laravel v5.1 supported
+  
+## Contribution
+
+Any ideas are welcome. Feel free to submit any issues or pull requests, please check the [contribution guidelines](CONTRIBUTING.md).

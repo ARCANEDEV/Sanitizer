@@ -2,4 +2,13 @@
 
 use Arcanedev\Sanitizer\Sanitizer;
 
-class EmptySanitizer extends Sanitizer {}
+/**
+ * Class     EmptySanitizer
+ *
+ * @package  Arcanedev\Sanitizer\Tests\Stubs
+ * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
+ */
+class EmptySanitizer extends Sanitizer
+{
+    //
+}

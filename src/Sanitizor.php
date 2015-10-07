@@ -1,8 +1,10 @@
 <?php namespace Arcanedev\Sanitizer;
 
 /**
- * Class Sanitizor
- * @package Arcanedev\Sanitizer
+ * Class     Sanitizor
+ *
+ * @package  Arcanedev\Sanitizer
+ * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
 class Sanitizor extends Sanitizer
 {
@@ -13,8 +15,8 @@ class Sanitizor extends Sanitizer
     /**
      * Make a sanitizer
      *
-     * @param  array $data
-     * @param  array $rules
+     * @param  array  $data
+     * @param  array  $rules
      *
      * @return array
      */

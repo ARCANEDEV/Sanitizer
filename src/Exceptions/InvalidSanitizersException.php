@@ -1,3 +1,9 @@
 <?php namespace Arcanedev\Sanitizer\Exceptions;
 
-class InvalidSanitizersException extends Exception { }
+/**
+ * Class     InvalidSanitizersException
+ *
+ * @package  Arcanedev\Sanitizer\Exceptions
+ * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
+ */
+class InvalidSanitizersException extends SanitizerException {}
