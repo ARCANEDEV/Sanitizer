@@ -27,5 +27,6 @@
         "psr-4": {
             "Arcanedev\\Sanitizer\\Tests\\": "tests/"
         }
-    }
+    },
+    "minimum-stability": "stable"
 }
