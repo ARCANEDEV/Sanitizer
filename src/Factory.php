@@ -80,11 +80,15 @@ class Factory
      * Check the filter name.
      *
      * @param  string  $name
+     *
+     * @throws Exceptions\InvalidFilterException
      */
     private function checkName($name)
     {
         if (empty($name) || ! is_string($name)) {
-            throw new InvalidArgumentException('The Sanitizer filter name must be a non empty string.');
+            throw new Exceptions\InvalidFilterException(
+                'The Sanitizer filter name must be a non empty string.'
+            );
         }
     }
 
@@ -97,7 +101,16 @@ class Factory
      */
     private function isFilterable($filter)
     {
-        if ( ! ($filter instanceof Closure || $filter instanceof Filterable)) {
+        if ($filter instanceof Closure) {
+            return;
+        }
+        elseif (is_string($filter) && ! class_exists($filter)) {
+            throw new Exceptions\InvalidFilterException(
+                "The [$filter] class does not exits."
+            );
+        }
+
+        if ( ! in_array(Filterable::class, class_implements($filter))) {
             throw new Exceptions\InvalidFilterException(
                 'The filter must be a Closure or a class implementing the Filterable interface.'
             );
