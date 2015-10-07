@@ -25,7 +25,7 @@ Feel free to check out the [releases](https://github.com/ARCANEDEV/Sanitizer/rel
 
 ### Requirements
 
-    - PHP >= 5.4.0
+    - PHP >= 5.5.9
     
 ## Installation
 
