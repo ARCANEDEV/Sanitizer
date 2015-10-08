@@ -30,7 +30,7 @@ abstract class FormRequest extends BaseFormRequest
     protected function sanitize()
     {
         $sanitized = sanitizer()->make(
-            $this->input(),
+            $this->all(),
             $this->sanitizerRules()
         );
 
