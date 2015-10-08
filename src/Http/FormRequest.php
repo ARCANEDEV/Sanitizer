@@ -42,8 +42,5 @@ abstract class FormRequest extends BaseFormRequest
      *
      * @return array
      */
-    protected function sanitizerRules()
-    {
-        return [];
-    }
+    abstract protected function sanitizerRules();
 }
