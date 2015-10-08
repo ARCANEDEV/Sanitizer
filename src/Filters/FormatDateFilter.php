@@ -26,7 +26,7 @@ class FormatDateFilter implements Filterable
      */
     public function filter($value, array $options = [])
     {
-        if ( ! is_string($value) || empty($value)) {
+        if ( ! is_string($value) || empty(trim($value))) {
             return $value;
         }
 
