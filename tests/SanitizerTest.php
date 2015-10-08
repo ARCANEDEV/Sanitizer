@@ -112,7 +112,7 @@ class SanitizerTest extends TestCase
     public function it_can_sanitize_by_custom_sanitizer()
     {
         $data = [
-            'title' => 'Slugify this title',
+            'title'     => 'Slugify this title',
         ];
 
         $rules = [
@@ -124,6 +124,40 @@ class SanitizerTest extends TestCase
         $this->assertEquals([
             'title' => 'slugify-this-title'
         ], $this->sanitizer->sanitize($data, $rules));
+    }
+
+    /** @test */
+    public function it_can_sanitize_with_missing_rules()
+    {
+        $data = [
+            'slug'     => 'Slugify this title',
+            'content'  => 'Hello world',
+        ];
+
+        $rules = [
+            'slug' => 'slug'
+        ];
+
+        $this->registerSlugSanitizer();
+
+        $this->assertEquals([
+            'slug'      => 'slugify-this-title',
+            'content'   => 'Hello world',
+        ], $this->sanitizer->sanitize($data, $rules));
+    }
+
+    /** @test */
+    public function it_can_sanitize_with_options()
+    {
+        $sanitized = $this->sanitizer->sanitize([
+            'date' => '21/12/1991',
+        ], [
+            'date' => 'format_date:d/m/Y, Y-m-d',
+        ]);
+
+        $this->assertEquals([
+            'date' => '1991-12-21'
+        ], $sanitized);
     }
 
     /**
