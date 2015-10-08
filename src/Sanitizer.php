@@ -42,6 +42,10 @@ class Sanitizer implements SanitizerInterface
      */
     public function __construct(array $filters = [])
     {
+        if (empty($filters)) {
+            $filters = $this->getDefaultFilters();
+        }
+
         $this->setFilters($filters);
         $this->rules = new Rules;
     }
@@ -168,5 +172,29 @@ class Sanitizer implements SanitizerInterface
                 "No filter found by the name of $name"
             );
         }
+    }
+
+    /* ------------------------------------------------------------------------------------------------
+     |  Other Functions
+     | ------------------------------------------------------------------------------------------------
+     */
+    /**
+     * Get default filters.
+     *
+     * @return array
+     */
+    private function getDefaultFilters()
+    {
+        return [
+            'capitalize'  => Filters\CapitalizeFilter::class,
+            'email'       => Filters\EmailFilter::class,
+            'escape'      => Filters\EscapeFilter::class,
+            'format_date' => Filters\FormatDateFilter::class,
+            'lowercase'   => Filters\LowercaseFilter::class,
+            'slug'        => Filters\SlugFilter::class,
+            'trim'        => Filters\TrimFilter::class,
+            'uppercase'   => Filters\UppercaseFilter::class,
+            'url'         => Filters\UrlFilter::class,
+        ];
     }
 }
