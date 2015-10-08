@@ -2,7 +2,6 @@
 
 use Arcanedev\Sanitizer\Contracts\Filterable;
 use Closure;
-use InvalidArgumentException;
 
 /**
  * Class     Factory
@@ -59,10 +58,10 @@ class Factory
     /**
      *  Add a custom filters to all Sanitizers created with this Factory.
      *
-     *  @param  string  $name
-     *  @param  mixed   $filter
+     *  @param  string                      $name
+     *  @param  \Closure|Filterable|string  $filter
      *
-     *  @throws InvalidArgumentException
+     *  @throws Exceptions\InvalidFilterException
      */
     public function extend($name, $filter)
     {
