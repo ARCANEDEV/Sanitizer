@@ -1,9 +1,9 @@
 <?php namespace Arcanedev\Sanitizer\Exceptions;
 
 /**
- * Class     InvalidSanitizersException
+ * Class     InvalidFilterException
  *
  * @package  Arcanedev\Sanitizer\Exceptions
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class InvalidSanitizersException extends SanitizerException {}
+class InvalidFilterException extends SanitizerException {}

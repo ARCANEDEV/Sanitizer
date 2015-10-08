@@ -1,14 +1,9 @@
 <?php namespace Arcanedev\Sanitizer\Tests\Stubs;
 
-use Arcanedev\Sanitizer\Sanitizer;
-
 /**
- * Class     EmptySanitizer
+ * Class     NotFilterable
  *
  * @package  Arcanedev\Sanitizer\Tests\Stubs
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class EmptySanitizer extends Sanitizer
-{
-    //
-}
+class NotFilterable {}

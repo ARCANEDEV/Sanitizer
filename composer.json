@@ -21,12 +21,12 @@
     "autoload": {
         "psr-4": {
             "Arcanedev\\Sanitizer\\": "src/"
-        }
+        },
+        "files": ["helpers.php"]
     },
     "autoload-dev": {
         "psr-4": {
             "Arcanedev\\Sanitizer\\Tests\\": "tests/"
         }
-    },
-    "minimum-stability": "stable"
+    }
 }

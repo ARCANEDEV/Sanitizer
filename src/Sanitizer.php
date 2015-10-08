@@ -1,6 +1,8 @@
 <?php namespace Arcanedev\Sanitizer;
 
+use Arcanedev\Sanitizer\Contracts\Filterable;
 use Arcanedev\Sanitizer\Contracts\SanitizerInterface;
+use Closure;
 
 /**
  * Class     Sanitizer
@@ -8,72 +10,77 @@ use Arcanedev\Sanitizer\Contracts\SanitizerInterface;
  * @package  Arcanedev\Sanitizer
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-abstract class Sanitizer implements SanitizerInterface
+class Sanitizer implements SanitizerInterface
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
      | ------------------------------------------------------------------------------------------------
-    */
+     */
     /**
-     * Sanitizer rules.
+     * Available filters.
      *
      * @var array
      */
-    protected $rules = [];
+    protected $filters = [];
 
     /**
-     * Custom Sanitizers.
+     * Rules to sanitize.
      *
-     * @var array
+     * @var Entities\Rules
      */
-    private $sanitizers = [];
+    protected $rules;
+
+    /* ------------------------------------------------------------------------------------------------
+     |  Constructor
+     | ------------------------------------------------------------------------------------------------
+     */
+    /**
+     * Create a new sanitizer instance.
+     *
+     * @param  array  $filters
+     */
+    public function __construct(array $filters = [])
+    {
+        $this->rules = new Entities\Rules;
+        $this->setFilters($filters);
+    }
 
     /* ------------------------------------------------------------------------------------------------
      |  Getters & Setters
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * Set sanitizer rules.
+     * Set filters.
      *
-     * @param  array|null  $rules
+     * @param  array  $filters
      *
      * @return self
-     *
-     * @throws Exceptions\InvalidSanitizersException
      */
-    public function setRules($rules)
+    public function setFilters(array $filters)
     {
-        if ( ! is_null($rules) && ! empty($rules)) {
-            $this->checkRules($rules);
-
-            $this->rules = array_merge($this->rules, $rules);
+        if (empty($this->filters)) {
+            $this->filters = $this->getDefaultFilters();
         }
+
+        $this->filters = array_merge(
+            $this->filters, $filters
+        );
 
         return $this;
     }
 
     /**
-     * Get sanitizer method name.
+     * Set rules.
      *
-     * @param  string  $name
+     * @param  array  $rules
      *
-     * @return string
+     * @return self
      */
-    private function getSanitizerMethodName($name)
+    public function setRules(array $rules)
     {
-        return 'sanitize' . ucwords($name);
-    }
+        $this->rules->set($rules);
 
-    /**
-     * Get sanitizer method.
-     *
-     * @param  string  $sanitizer
-     *
-     * @return array
-     */
-    private function getSanitizerMethod($sanitizer)
-    {
-        return [$this, $this->getSanitizerMethodName($sanitizer)];
+        return $this;
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -81,251 +88,111 @@ abstract class Sanitizer implements SanitizerInterface
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * Sanitize data.
+     * Sanitize the given data.
      *
-     * @param  array       $data
-     * @param  array|null  $rules
+     * @param  array  $data
+     * @param  array  $rules
+     * @param  array  $filters
      *
      * @return array
-     *
-     * @throws Exceptions\InvalidSanitizersException
-     * @throws Exceptions\SanitizeMethodNotFoundException
      */
-    public function sanitize(array $data, $rules = null)
+    public function sanitize(array $data, array $rules = [], array $filters = [])
     {
         $this->setRules($rules);
+        $this->setFilters($filters);
 
-        // Sanitize each fields by rules
-        foreach ($this->rules as $field => $sanitizerRules) {
-            if (isset($data[$field])) {
-                $this->applySanitizers($data[$field], $sanitizerRules);
-            }
+        foreach ($data as $name => $value) {
+            $data[$name] = $this->sanitizeAttribute($name, $value);
         }
 
         return $data;
     }
 
     /**
-     * Apply Sanitizers.
+     * Sanitize the given attribute
      *
-     * @param  mixed  $value
-     * @param  array  $sanitizers
+     * @param  string  $attribute
+     * @param  mixed   $value
      *
      * @return mixed
-     *
-     * @throws Exceptions\InvalidSanitizersException
-     * @throws Exceptions\SanitizeMethodNotFoundException
      */
-    private function applySanitizers(&$value, $sanitizers)
+    protected function sanitizeAttribute($attribute, $value)
     {
-        foreach ($this->splitSanitizers($sanitizers) as $sanitizer) {
-            $value = $this->applySanitizer($value, $sanitizer);
+        foreach ($this->rules->get($attribute) as $rule) {
+            $value = $this->applyFilter($rule['name'], $value, $rule['options']);
         }
 
         return $value;
     }
 
     /**
-     * Convert sanitizer rules to array.
+     * Apply the given filter by its name.
      *
-     * @param  string|array  $sanitizers
-     *
-     * @return array
-     *
-     * @throws Exceptions\InvalidSanitizersException
-     */
-    private function splitSanitizers($sanitizers)
-    {
-        if (is_array($sanitizers)) {
-            return $sanitizers;
-        }
-
-        if (is_string($sanitizers)) {
-            return $this->splitStringSanitizers($sanitizers);
-        }
-
-        throw new Exceptions\InvalidSanitizersException(
-            'Sanitizer rules must be an array or string.'
-        );
-    }
-
-    /**
-     * Split string Sanitizers to array.
-     *
-     * @param  string  $sanitizers
-     *
-     * @return array
-     *
-     * @throws Exceptions\InvalidSanitizersException
-     */
-    private function splitStringSanitizers($sanitizers)
-    {
-        if (empty($sanitizers)) {
-            throw new Exceptions\InvalidSanitizersException(
-                'Sanitizer rules must not be an empty string.'
-            );
-        }
-
-        $sanitizers = array_map(function($sanitizer) {
-            return trim($sanitizer);
-        }, explode('|', $sanitizers));
-
-        return array_filter($sanitizers);
-    }
-
-
-    /**
-     * Apply Sanitizer.
-     *
+     * @param  string  $name
      * @param  mixed   $value
-     * @param  string  $sanitizer
+     * @param  array   $options
      *
      * @return mixed
-     *
-     * @throws Exceptions\SanitizeMethodNotFoundException
      */
-    private function applySanitizer($value, $sanitizer)
+    protected function applyFilter($name, $value, $options = [])
     {
-        if (! $this->sanitizerExists($sanitizer)) {
-            throw new Exceptions\SanitizeMethodNotFoundException(
-                "Sanitize Method [$sanitizer] not found !"
-            );
+        $this->hasFilter($name);
+
+        if (empty($value)) return $value;
+
+        $filter = $this->filters[$name];
+
+        if ($filter instanceof Closure) {
+            return call_user_func_array($filter, compact('value', 'options'));
         }
 
-        // If a custom sanitizer is registered on the subclass, then let's trigger that instead.
-        if ($this->hasSanitizerMethod($sanitizer)) {
-            $sanitizer = $this->getSanitizerMethod($sanitizer);
-        }
-        elseif ($this->hasCustomSanitizer($sanitizer)) {
-            $sanitizer = $this->sanitizers[$sanitizer];
-        }
+        /** @var Filterable $filterable */
+        $filterable = new $filter;
 
-        return call_user_func($sanitizer, $value);
-    }
-
-    /**
-     * Register a custom sanitizer.
-     *
-     * @param  string    $name      Name of the sanitizer
-     * @param  Callable  $callback
-     * @param  bool      $override  Override sanitizer if it already exists
-     *
-     * @return self
-     *
-     * @throws Exceptions\NotCallableException
-     * @throws Exceptions\SanitizerMethodAlreadyExistsException
-     */
-    public function register($name, $callback, $override = false)
-    {
-        if ( ! is_callable($callback)) {
-            throw new Exceptions\NotCallableException(
-                'The $callback argument of register() must be callable.'
-            );
-        }
-
-        if ($this->hasCustomSanitizer($name) && $override === false) {
-            throw new Exceptions\SanitizerMethodAlreadyExistsException(
-                'Sanitizer with this name already exists.'
-            );
-        }
-
-        $this->sanitizers[$name] = $callback;
-
-        return $this;
+        return $filterable->filter($value, $options);
     }
 
     /* ------------------------------------------------------------------------------------------------
-     |  Check Function
+     |  Check Functions
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * Check if a sanitizer exists.
+     * Check has filter, if does not exist, throw an Exception.
      *
      * @param  string  $name
      *
-     * @return bool
+     * @throws Exceptions\FilterNotFoundException
      */
-    private function sanitizerExists($name)
+    private function hasFilter($name)
     {
-        return $this->hasSanitizerMethod($name)
-            || $this->hasCustomSanitizer($name)
-            || function_exists($name);
-    }
-
-    /**
-     * Check if has a custom sanitizer method.
-     *
-     * @param  string  $name
-     *
-     * @return bool
-     */
-    private function hasSanitizerMethod($name)
-    {
-        return method_exists($this, $this->getSanitizerMethodName($name));
-    }
-
-    /**
-     * Check if has a custom sanitizer closure.
-     *
-     * @param  string  $name
-     *
-     * @return bool
-     */
-    private function hasCustomSanitizer($name)
-    {
-        return array_key_exists($name, $this->sanitizers);
-    }
-
-    /**
-     * Check Rules.
-     *
-     * @param  array  $rules
-     *
-     * @throws Exceptions\InvalidSanitizersException
-     */
-    private function checkRules($rules)
-    {
-        if ( ! is_array($rules)) {
-            throw new Exceptions\InvalidSanitizersException(
-                'The sanitizer rules must be an array, ' . gettype($rules) . ' is given'
+        if ( ! isset($this->filters[$name])) {
+            throw new Exceptions\FilterNotFoundException(
+                "No filter found by the name of $name"
             );
         }
     }
 
     /* ------------------------------------------------------------------------------------------------
-     |  Common Functions
+     |  Other Functions
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * Sanitize an email address.
+     * Get default filters.
      *
-     * @param  string  $email
-     *
-     * @return string
+     * @return array
      */
-    protected function sanitizeEmail($email)
+    private function getDefaultFilters()
     {
-        $email = strtolower(trim($email));
-
-        return filter_var($email, FILTER_SANITIZE_EMAIL);
-    }
-
-    /**
-     * Sanitize an url.
-     *
-     * @param  string  $url
-     *
-     * @return string
-     */
-    protected function sanitizeUrl($url)
-    {
-        $url = trim($url);
-
-        // $url = parse_url($url);
-        if (substr($url, 0, 7) !== 'http://' || substr($url, 0, 8) !== 'https://') {
-            $url = 'http://' . $url;
-        }
-
-        return filter_var($url, FILTER_SANITIZE_URL);
+        return [
+            'capitalize'  => Filters\CapitalizeFilter::class,
+            'email'       => Filters\EmailFilter::class,
+            'escape'      => Filters\EscapeFilter::class,
+            'format_date' => Filters\FormatDateFilter::class,
+            'lowercase'   => Filters\LowercaseFilter::class,
+            'slug'        => Filters\SlugFilter::class,
+            'trim'        => Filters\TrimFilter::class,
+            'uppercase'   => Filters\UppercaseFilter::class,
+            'url'         => Filters\UrlFilter::class,
+        ];
     }
 }
