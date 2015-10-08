@@ -46,7 +46,7 @@ class SanitizerTest extends TestCase
     }
 
     /** @test */
-    public function it_can_make_sanitizer()
+    public function it_can_sanitize()
     {
         $sanitized = $this->sanitizer->sanitize([
             'last_name'  => 'john  ',
@@ -61,6 +61,20 @@ class SanitizerTest extends TestCase
         $this->assertEquals([
             'last_name'  => 'JOHN',
             'first_name' => 'Doe',
+            'email'      => 'john.doe@email.com',
+        ], $sanitized);
+    }
+
+    /** @test */
+    public function it_can_sanitize_with_extra_pipe()
+    {
+        $sanitized = $this->sanitizer->sanitize([
+            'email'      => 'John.DOE@EmAiL.com  '
+        ], [
+            'email'      => 'email|'
+        ]);
+
+        $this->assertEquals([
             'email'      => 'john.doe@email.com',
         ], $sanitized);
     }

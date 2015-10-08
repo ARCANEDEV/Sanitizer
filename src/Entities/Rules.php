@@ -84,17 +84,33 @@ class Rules
 
         foreach ($rules as $attribute => $filters) {
             if (empty($filters)) {
-                throw new InvalidFilterException;
+                throw new InvalidFilterException(
+                    "The attribute [$attribute] must contain at least one filter."
+                );
             }
 
-            foreach (explode('|', $filters) as $filter) {
-                if ($parsedFilter = $this->parseRule($filter)) {
-                    $parsedRules[$attribute][] = $parsedFilter;
-                }
-            }
+            $this->parseAttributeFilters($parsedRules, $attribute, $filters);
         }
 
         return $parsedRules;
+    }
+
+    /**
+     * @param $parsedRules
+     * @param $attribute
+     * @param $filters
+     */
+    protected function parseAttributeFilters(&$parsedRules, $attribute, $filters)
+    {
+        foreach (explode('|', $filters) as $filter) {
+            $parsedFilter = $this->parseRule($filter);
+
+            if (empty($parsedFilter)) {
+                continue;
+            }
+
+            $parsedRules[$attribute][] = $parsedFilter;
+        }
     }
 
     /**
