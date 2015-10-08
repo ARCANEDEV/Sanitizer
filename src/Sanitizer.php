@@ -2,7 +2,6 @@
 
 use Arcanedev\Sanitizer\Contracts\Filterable;
 use Arcanedev\Sanitizer\Contracts\SanitizerInterface;
-use Arcanedev\Sanitizer\Entities\Rules;
 use Closure;
 
 /**
@@ -27,7 +26,7 @@ class Sanitizer implements SanitizerInterface
     /**
      * Rules to sanitize.
      *
-     * @var Rules
+     * @var Entities\Rules
      */
     protected $rules;
 
@@ -42,12 +41,8 @@ class Sanitizer implements SanitizerInterface
      */
     public function __construct(array $filters = [])
     {
-        if (empty($filters)) {
-            $filters = $this->getDefaultFilters();
-        }
-
+        $this->rules = new Entities\Rules;
         $this->setFilters($filters);
-        $this->rules = new Rules;
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -63,9 +58,12 @@ class Sanitizer implements SanitizerInterface
      */
     public function setFilters(array $filters)
     {
+        if (empty($this->filters)) {
+            $this->filters = $this->getDefaultFilters();
+        }
+
         $this->filters = array_merge(
-            $this->filters,
-            $filters
+            $this->filters, $filters
         );
 
         return $this;
