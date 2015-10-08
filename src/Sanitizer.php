@@ -2,6 +2,7 @@
 
 use Arcanedev\Sanitizer\Contracts\Filterable;
 use Arcanedev\Sanitizer\Contracts\SanitizerInterface;
+use Arcanedev\Sanitizer\Entities\Rules;
 use Closure;
 
 /**
@@ -26,9 +27,9 @@ class Sanitizer implements SanitizerInterface
     /**
      * Rules to sanitize.
      *
-     * @var array
+     * @var Rules
      */
-    protected $rules = [];
+    protected $rules;
 
     /* ------------------------------------------------------------------------------------------------
      |  Constructor
@@ -42,6 +43,7 @@ class Sanitizer implements SanitizerInterface
     public function __construct(array $filters = [])
     {
         $this->setFilters($filters);
+        $this->rules = new Rules;
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -74,10 +76,7 @@ class Sanitizer implements SanitizerInterface
      */
     public function setRules(array $rules)
     {
-        $this->rules = array_merge(
-            $this->rules,
-            $this->parseRules($rules)
-        );
+        $this->rules->set($rules);
 
         return $this;
     }
@@ -108,34 +107,6 @@ class Sanitizer implements SanitizerInterface
     }
 
     /**
-     * Parse a rules array.
-     *
-     * @param  array  $rules
-     *
-     * @return array
-     *
-     * @throws Exceptions\InvalidFilterException
-     */
-    protected function parseRules(array $rules)
-    {
-        $parsedRules = [];
-
-        foreach ($rules as $attribute => $filters) {
-            if (empty($filters)) {
-                throw new Exceptions\InvalidFilterException();
-            }
-
-            foreach (explode('|', $filters) as $filter) {
-                if ($parsedFilter = $this->parseRule($filter)) {
-                    $parsedRules[$attribute][] = $parsedFilter;
-                }
-            }
-        }
-
-        return $parsedRules;
-    }
-
-    /**
      * Sanitize the given attribute
      *
      * @param  string  $attribute
@@ -145,35 +116,11 @@ class Sanitizer implements SanitizerInterface
      */
     protected function sanitizeAttribute($attribute, $value)
     {
-        if ( ! isset($this->rules[$attribute])) {
-            return $value;
-        }
-
-        foreach ($this->rules[$attribute] as $rule) {
+        foreach ($this->rules->get($attribute) as $rule) {
             $value = $this->applyFilter($rule['name'], $value, $rule['options']);
         }
 
         return $value;
-    }
-
-    /**
-     * Parse a rule.
-     *
-     * @param  string $rule
-     *
-     * @return array
-     */
-    protected function parseRule($rule)
-    {
-        $name    = $rule;
-        $options = [];
-
-        if (str_contains($rule, ':')) {
-            list($name, $options) = explode(':', $rule, 2);
-            $options              = array_map('trim', explode(',', $options));
-        }
-
-        return empty($name) ? [] : compact('name', 'options');
     }
 
     /**
