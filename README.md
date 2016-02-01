@@ -38,9 +38,9 @@ Feel free to check out the [releases](https://github.com/ARCANEDEV/Sanitizer/rel
   * Framework agnostic package.
   * Easy setup &amp; configuration.
   * Well documented &amp; IDE Friendly.
-  * Well tested with maximum code quality. 
+  * Well tested with maximum code quality.
   * Made with :heart: &amp; :coffee:.
-    
+
 ## Table of contents
 
 1. [Requirements](1-Requirements.md)
