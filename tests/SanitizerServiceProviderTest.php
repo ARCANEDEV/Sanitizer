@@ -30,9 +30,9 @@ class SanitizerServiceProviderTest extends LaravelTestCase
 
     public function tearDown()
     {
-        parent::tearDown();
-
         unset($this->provider);
+
+        parent::tearDown();
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -40,12 +40,13 @@ class SanitizerServiceProviderTest extends LaravelTestCase
      | ------------------------------------------------------------------------------------------------
      */
     /** @test */
-    public function it_can_get_what_it_provides()
+    public function it_can_provides()
     {
-        // This is for 100% code converge
-        $this->assertEquals([
+        $expected = [
             'arcanedev.sanitizer'
-        ], $this->provider->provides());
+        ];
+
+        $this->assertEquals($expected, $this->provider->provides());
     }
 
     /** @test */

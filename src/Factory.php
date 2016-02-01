@@ -61,7 +61,7 @@ class Factory
      *  @param  string                      $name
      *  @param  \Closure|Filterable|string  $filter
      *
-     *  @throws Exceptions\InvalidFilterException
+     *  @throws \Arcanedev\Sanitizer\Exceptions\InvalidFilterException
      */
     public function extend($name, $filter)
     {
@@ -83,7 +83,7 @@ class Factory
      *
      * @param  string  $name
      *
-     * @throws Exceptions\InvalidFilterException
+     * @throws \Arcanedev\Sanitizer\Exceptions\InvalidFilterException
      */
     private function checkName($name)
     {
@@ -99,7 +99,7 @@ class Factory
      *
      * @param  mixed  $filter
      *
-     * @throws Exceptions\InvalidFilterException
+     * @throws \Arcanedev\Sanitizer\Exceptions\InvalidFilterException
      */
     private function isFilterable($filter)
     {

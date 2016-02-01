@@ -32,9 +32,9 @@ abstract class FilterTestCase extends TestCase
 
     public function tearDown()
     {
-        parent::tearDown();
-
         unset($this->sanitizer);
+
+        parent::tearDown();
     }
 
     /* ------------------------------------------------------------------------------------------------

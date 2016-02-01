@@ -30,18 +30,4 @@ abstract class TestCase extends BaseTestCase
         'uppercase'   => \Arcanedev\Sanitizer\Filters\UppercaseFilter::class,
         'url'         => \Arcanedev\Sanitizer\Filters\UrlFilter::class,
     ];
-
-    /* ------------------------------------------------------------------------------------------------
-     |  Main Functions
-     | ------------------------------------------------------------------------------------------------
-     */
-    public function setUp()
-    {
-        parent::setUp();
-    }
-
-    public function tearDown()
-    {
-        parent::tearDown();
-    }
 }

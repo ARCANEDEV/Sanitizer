@@ -2,6 +2,12 @@
 
 use Arcanedev\Sanitizer\Exceptions\InvalidFilterException;
 
+/**
+ * Class     Rules
+ *
+ * @package  Arcanedev\Sanitizer\Entities
+ * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
+ */
 class Rules
 {
     /* ------------------------------------------------------------------------------------------------
@@ -14,6 +20,9 @@ class Rules
     /* ------------------------------------------------------------------------------------------------
      |  Constructor
      | ------------------------------------------------------------------------------------------------
+     */
+    /**
+     * Rules constructor.
      */
     public function __construct()
     {
@@ -76,7 +85,7 @@ class Rules
      *
      * @return array
      *
-     * @throws InvalidFilterException
+     * @throws \Arcanedev\Sanitizer\Exceptions\InvalidFilterException
      */
     protected function parseRules(array $rules)
     {
@@ -96,27 +105,27 @@ class Rules
     }
 
     /**
-     * @param $parsedRules
-     * @param $attribute
-     * @param $filters
+     * Parse attribute's filters.
+     *
+     * @param  array   $parsedRules
+     * @param  string  $attribute
+     * @param  string  $filters
      */
-    protected function parseAttributeFilters(&$parsedRules, $attribute, $filters)
+    protected function parseAttributeFilters(array &$parsedRules, $attribute, $filters)
     {
         foreach (explode('|', $filters) as $filter) {
             $parsedFilter = $this->parseRule($filter);
 
-            if (empty($parsedFilter)) {
-                continue;
+            if ( ! empty($parsedFilter)) {
+                $parsedRules[$attribute][] = $parsedFilter;
             }
-
-            $parsedRules[$attribute][] = $parsedFilter;
         }
     }
 
     /**
      * Parse a rule.
      *
-     * @param  string $rule
+     * @param  string  $rule
      *
      * @return array
      */

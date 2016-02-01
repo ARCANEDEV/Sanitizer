@@ -83,7 +83,7 @@ class SanitizerServiceProvider extends ServiceProvider
     private function registerSanitizer()
     {
         $this->singleton('arcanedev.sanitizer', function ($app) {
-            /** @var  \Illuminate\Config\Repository  $config */
+            /** @var  \Illuminate\Contracts\Config\Repository  $config */
             $config = $app['config'];
 
             return new Factory($config->get('sanitizer.filters'));

@@ -1,6 +1,4 @@
-<?php
-
-namespace Arcanedev\Sanitizer\Tests\Http;
+<?php namespace Arcanedev\Sanitizer\Tests\Http;
 
 use Arcanedev\Sanitizer\Tests\LaravelTestCase;
 use Arcanedev\Sanitizer\Tests\Stubs\DummyRequest;
