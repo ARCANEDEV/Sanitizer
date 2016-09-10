@@ -43,15 +43,10 @@ class SanitizerServiceProviderTest extends LaravelTestCase
     public function it_can_provides()
     {
         $expected = [
-            'arcanedev.sanitizer'
+            'arcanedev.sanitizer',
+            \Arcanedev\Sanitizer\Contracts\Sanitizer::class,
         ];
 
         $this->assertEquals($expected, $this->provider->provides());
-    }
-
-    /** @test */
-    public function it_can_get_base_path()
-    {
-        $this->assertTrue(is_dir($this->provider->getBasePath()));
     }
 }

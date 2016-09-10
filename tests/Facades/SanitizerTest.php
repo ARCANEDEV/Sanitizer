@@ -16,6 +16,21 @@ class SanitizerTest extends LaravelTestCase
      | ------------------------------------------------------------------------------------------------
      */
     /** @test */
+    public function it_can_be_instantiated_with_contract()
+    {
+        $this->assertInstanceOf(
+            \Arcanedev\Sanitizer\Factory::class,
+            $this->app->make(\Arcanedev\Sanitizer\Contracts\Sanitizer::class)
+        );
+    }
+
+    /** @test */
+    public function it_can_be_instantiated_via_helper()
+    {
+        $this->assertInstanceOf(\Arcanedev\Sanitizer\Factory::class, sanitizer());
+    }
+
+    /** @test */
     public function it_can_make_sanitizer()
     {
         $sanitized = Sanitizer::make([
@@ -28,10 +43,10 @@ class SanitizerTest extends LaravelTestCase
             'email'      => 'email'
         ]);
 
-        $this->assertEquals([
-            'last_name'  => "JOHN",
-            'first_name' => "Doe",
-            'email'      => "john.doe@email.com",
+        $this->assertSame([
+            'last_name'  => 'JOHN',
+            'first_name' => 'Doe',
+            'email'      => 'john.doe@email.com',
         ], $sanitized);
     }
 
@@ -54,7 +69,7 @@ class SanitizerTest extends LaravelTestCase
             'status'     => 'rekt',
         ]);
 
-        $this->assertEquals([
+        $this->assertSame([
             'last_name'  => 'JOHN',
             'first_name' => 'Doe',
             'email'      => 'john.doe@email.com',
@@ -65,7 +80,11 @@ class SanitizerTest extends LaravelTestCase
     /** @test */
     public function it_can_extend_filter_from_string()
     {
-        Sanitizer::extend('slug', 'Arcanedev\\Sanitizer\\Filters\\SlugFilter');
+        Sanitizer::extend('slug', \Arcanedev\Sanitizer\Filters\SlugFilter::class);
+
+        $sanitized = Sanitizer::make(['slug' => 'Hello world'], ['slug' => 'slug']);
+
+        $this->assertSame(['slug' => 'hello-world'], $sanitized);
     }
 
     /**

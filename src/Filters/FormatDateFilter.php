@@ -26,15 +26,14 @@ class FormatDateFilter implements Filterable
      */
     public function filter($value, array $options = [])
     {
-        if ( ! is_string($value) || empty(trim($value))) {
+        if ( ! is_string($value) || empty(trim($value)))
             return $value;
-        }
 
         $this->checkOptions($options);
 
         list($currentFormat, $targetFormat) = array_map('trim', $options);
 
-        return DateTime::CreateFromFormat($currentFormat, $value)->format($targetFormat);
+        return DateTime::createFromFormat($currentFormat, $value)->format($targetFormat);
     }
 
     /* ------------------------------------------------------------------------------------------------

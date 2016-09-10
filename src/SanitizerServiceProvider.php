@@ -15,13 +15,6 @@ class SanitizerServiceProvider extends ServiceProvider
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * Vendor name.
-     *
-     * @var string
-     */
-    protected $vendor  = 'arcanedev';
-
-    /**
      * Package name.
      *
      * @var string
@@ -60,7 +53,9 @@ class SanitizerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        parent::boot();
+
+        $this->publishConfig();
     }
 
     /**
@@ -70,7 +65,10 @@ class SanitizerServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return ['arcanedev.sanitizer'];
+        return [
+            'arcanedev.sanitizer',
+            Contracts\Sanitizer::class,
+        ];
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -88,5 +86,7 @@ class SanitizerServiceProvider extends ServiceProvider
 
             return new Factory($config->get('sanitizer.filters'));
         });
+
+        $this->bind(Contracts\Sanitizer::class, 'arcanedev.sanitizer');
     }
 }

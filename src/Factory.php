@@ -50,9 +50,7 @@ class Factory
      */
     public function make(array $data, array $rules)
     {
-        $sanitizer = new Sanitizer($this->filters);
-
-        return $sanitizer->sanitize($data, $rules);
+        return (new Sanitizer($this->filters))->sanitize($data, $rules);
     }
 
     /**

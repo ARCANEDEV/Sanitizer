@@ -1,6 +1,7 @@
 <?php namespace Arcanedev\Sanitizer\Filters;
 
 use Arcanedev\Sanitizer\Contracts\Filterable;
+use Illuminate\Support\Str;
 
 /**
  * Class     EmailFilter
@@ -24,12 +25,8 @@ class EmailFilter implements Filterable
      */
     public function filter($value, array $options = [])
     {
-        if ( ! is_string($value)) {
-            return $value;
-        }
-
-        $value = strtolower(trim($value));
-
-        return  filter_var($value, FILTER_SANITIZE_EMAIL);
+        return is_string($value)
+            ? filter_var(Str::lower(trim($value)), FILTER_SANITIZE_EMAIL)
+            : $value;
     }
 }

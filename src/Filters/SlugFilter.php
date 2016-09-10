@@ -1,6 +1,7 @@
 <?php namespace Arcanedev\Sanitizer\Filters;
 
 use Arcanedev\Sanitizer\Contracts\Filterable;
+use Illuminate\Support\Str;
 
 /**
  * Class     SlugFilter
@@ -24,10 +25,6 @@ class SlugFilter implements Filterable
      */
     public function filter($value, array $options = [])
     {
-        if ( ! is_string($value)) {
-            return $value;
-        }
-
-        return str_slug($value);
+        return is_string($value) ? Str::slug($value) : $value;
     }
 }

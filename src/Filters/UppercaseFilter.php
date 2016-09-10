@@ -1,6 +1,7 @@
 <?php namespace Arcanedev\Sanitizer\Filters;
 
 use Arcanedev\Sanitizer\Contracts\Filterable;
+use Illuminate\Support\Str;
 
 /**
  * Class     UppercaseFilter
@@ -24,10 +25,6 @@ class UppercaseFilter implements Filterable
      */
     public function filter($value, array $options = [])
     {
-        if ( ! is_string($value)) {
-            return $value;
-        }
-
-        return strtoupper($value);
+        return is_string($value) ? Str::upper($value) : $value;
     }
 }

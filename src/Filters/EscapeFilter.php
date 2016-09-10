@@ -24,10 +24,6 @@ class EscapeFilter implements Filterable
      */
     public function filter($value, array $options = [])
     {
-        if ( ! is_string($value)) {
-            return $value;
-        }
-
-        return filter_var($value, FILTER_SANITIZE_STRING);
+        return is_string($value) ? filter_var($value, FILTER_SANITIZE_STRING) : $value;
     }
 }
