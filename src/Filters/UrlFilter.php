@@ -1,6 +1,7 @@
 <?php namespace Arcanedev\Sanitizer\Filters;
 
 use Arcanedev\Sanitizer\Contracts\Filterable;
+use Illuminate\Support\Str;
 
 /**
  * Class     UrlFilter
@@ -24,14 +25,12 @@ class UrlFilter implements Filterable
      */
     public function filter($value, array $options = [])
     {
-        if ( ! is_string($value)) {
-            return $value;
-        }
+        if ( ! is_string($value)) return $value;
 
         $value = trim($value);
 
-        if ( ! starts_with($value, ['http://', 'https://'])) {
-            $value = 'http://' . $value;
+        if ( ! Str::startsWith($value, ['http://', 'https://'])) {
+            $value = "http://$value";
         }
 
         return filter_var($value, FILTER_SANITIZE_URL);

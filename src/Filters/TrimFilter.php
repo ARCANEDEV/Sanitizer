@@ -24,10 +24,6 @@ class TrimFilter implements Filterable
      */
     public function filter($value, array $options = [])
     {
-        if ( ! is_string($value)) {
-            return $value;
-        }
-
-        return trim($value);
+        return is_string($value) ? trim($value) : $value;
     }
 }

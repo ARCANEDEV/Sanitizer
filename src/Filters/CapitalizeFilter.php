@@ -1,6 +1,7 @@
 <?php namespace Arcanedev\Sanitizer\Filters;
 
 use Arcanedev\Sanitizer\Contracts\Filterable;
+use Illuminate\Support\Str;
 
 /**
  * Class     CapitalizeFilter
@@ -24,10 +25,6 @@ class CapitalizeFilter implements Filterable
      */
     public function filter($value, array $options = [])
     {
-        if ( ! is_string($value)) {
-            return $value;
-        }
-
-        return ucwords(strtolower($value));
+        return is_string($value) ? Str::title($value) : $value;
     }
 }
