@@ -1,7 +1,7 @@
 <?php namespace Arcanedev\Sanitizer;
 
 use Arcanedev\Sanitizer\Contracts\Filterable;
-use Arcanedev\Sanitizer\Contracts\SanitizerInterface;
+use Arcanedev\Sanitizer\Contracts\Sanitizer as SanitizerContract;
 use Closure;
 
 /**
@@ -10,7 +10,7 @@ use Closure;
  * @package  Arcanedev\Sanitizer
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class Sanitizer implements SanitizerInterface
+class Sanitizer implements SanitizerContract
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
