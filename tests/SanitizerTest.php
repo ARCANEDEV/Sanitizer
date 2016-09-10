@@ -14,7 +14,7 @@ class SanitizerTest extends TestCase
      |  Properties
      | ------------------------------------------------------------------------------------------------
      */
-    /** @var Sanitizer  */
+    /** @var \Arcanedev\Sanitizer\Sanitizer  */
     private $sanitizer;
 
     /* ------------------------------------------------------------------------------------------------
@@ -58,7 +58,7 @@ class SanitizerTest extends TestCase
             'email'      => 'email'
         ]);
 
-        $this->assertEquals([
+        $this->assertSame([
             'last_name'  => 'JOHN',
             'first_name' => 'Doe',
             'email'      => 'john.doe@email.com',
@@ -80,7 +80,7 @@ class SanitizerTest extends TestCase
             'email'      => 'email'
         ]);
 
-        $this->assertEquals([
+        $this->assertSame([
             'last_name'  => 'JOHN',
             'first_name' => 'Doe',
             'email'      => 'john.doe@email.com',
@@ -96,7 +96,7 @@ class SanitizerTest extends TestCase
             'email'      => 'email|'
         ]);
 
-        $this->assertEquals([
+        $this->assertSame([
             'email'      => 'john.doe@email.com',
         ], $sanitized);
     }
@@ -110,7 +110,7 @@ class SanitizerTest extends TestCase
                 'user_email' => 'FOO@BAR.COM '
             ]);
 
-        $this->assertEquals([
+        $this->assertSame([
             'user_email' => 'foo@bar.com'
         ], $sanitized);
     }
@@ -125,7 +125,7 @@ class SanitizerTest extends TestCase
             'url'   => 'url',
         ]);
 
-        $this->assertEquals([
+        $this->assertSame([
             'email' => 'foo@bar.com'
         ], $sanitized);
     }
@@ -157,7 +157,7 @@ class SanitizerTest extends TestCase
 
         $this->registerSlugSanitizer();
 
-        $this->assertEquals([
+        $this->assertSame([
             'title' => 'slugify-this-title'
         ], $this->sanitizer->sanitize($data, $rules));
     }
@@ -176,7 +176,7 @@ class SanitizerTest extends TestCase
 
         $this->registerSlugSanitizer();
 
-        $this->assertEquals([
+        $this->assertSame([
             'slug'      => 'slugify-this-title',
             'content'   => 'Hello world',
         ], $this->sanitizer->sanitize($data, $rules));
@@ -191,7 +191,7 @@ class SanitizerTest extends TestCase
             'date' => 'format_date:d/m/Y, Y-m-d',
         ]);
 
-        $this->assertEquals([
+        $this->assertSame([
             'date' => '1991-12-21'
         ], $sanitized);
     }
