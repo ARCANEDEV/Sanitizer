@@ -9,7 +9,7 @@ Or by adding the package to your `composer.json`.
 ```json
 {
     "require": {
-        "arcanedev/sanitizer": "~0.3.0"
+        "arcanedev/sanitizer": "~3.0"
     }
 }
 ```    
@@ -31,7 +31,7 @@ Once the package is installed, you can register the service provider in `config/
 ],
 ```
 
-And for the Facade:
+**(OPTIONAL)** And for the Facade:
 
 ```php
 // config/app.php
