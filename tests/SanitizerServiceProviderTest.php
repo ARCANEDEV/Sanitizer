@@ -43,8 +43,8 @@ class SanitizerServiceProviderTest extends LaravelTestCase
     public function it_can_provides()
     {
         $expected = [
-            'arcanedev.sanitizer',
             \Arcanedev\Sanitizer\Contracts\Sanitizer::class,
+            'arcanedev.sanitizer',
         ];
 
         $this->assertEquals($expected, $this->provider->provides());

@@ -66,8 +66,8 @@ class SanitizerServiceProvider extends ServiceProvider
     public function provides()
     {
         return [
-            'arcanedev.sanitizer',
             Contracts\Sanitizer::class,
+            'arcanedev.sanitizer',
         ];
     }
 
@@ -80,13 +80,13 @@ class SanitizerServiceProvider extends ServiceProvider
      */
     private function registerSanitizer()
     {
-        $this->singleton('arcanedev.sanitizer', function ($app) {
+        $this->singleton(Contracts\Sanitizer::class, function ($app) {
             /** @var  \Illuminate\Contracts\Config\Repository  $config */
             $config = $app['config'];
 
             return new Factory($config->get('sanitizer.filters'));
         });
 
-        $this->bind(Contracts\Sanitizer::class, 'arcanedev.sanitizer');
+        $this->singleton('arcanedev.sanitizer', Contracts\Sanitizer::class);
     }
 }
