@@ -7,6 +7,6 @@ if ( ! function_exists('sanitizer')) {
      * @return \Arcanedev\Sanitizer\Factory
      */
     function sanitizer() {
-        return app(\Arcanedev\Sanitizer\Contracts\Sanitizer::class);
+        return app(Arcanedev\Sanitizer\Contracts\Sanitizer::class);
     }
 }
