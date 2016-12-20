@@ -1,7 +1,6 @@
 # Sanitizer [![Packagist License][badge_license]](LICENSE.md) [![For PHP][badge_php]][link-github-repo] [![Laravel Supported][badge_laravel]][link-github-repo]
 
 [![Travis Status][badge_build]][link-travis]
-[![HHVM Status][badge_hhvm]][link-hhvm]
 [![Coverage Status][badge_coverage]][link-scrutinizer]
 [![Scrutinizer Code Quality][badge_quality]][link-scrutinizer]
 [![SensioLabs Insight][badge_insight]][link-insight]
@@ -50,7 +49,6 @@ If you discover any security related issues, please email arcanedev.maroc@gmail.
 [badge_license]:   http://img.shields.io/packagist/l/arcanedev/sanitizer.svg?style=flat-square
 
 [badge_build]:     http://img.shields.io/travis/ARCANEDEV/Sanitizer.svg?style=flat-square
-[badge_hhvm]:      https://img.shields.io/hhvm/arcanedev/sanitizer.svg?style=flat-square
 [badge_coverage]:  https://img.shields.io/scrutinizer/coverage/g/ARCANEDEV/Sanitizer.svg?style=flat-square
 [badge_quality]:   https://img.shields.io/scrutinizer/g/ARCANEDEV/Sanitizer.svg?style=flat-square
 [badge_insight]:   https://img.shields.io/sensiolabs/i/d27f1be9-328b-4cb4-ac67-27c10ba10c2d.svg?style=flat-square
@@ -66,6 +64,5 @@ If you discover any security related issues, please email arcanedev.maroc@gmail.
 [link-contributors]:  https://github.com/ARCANEDEV/Sanitizer/graphs/contributors
 [link-packagist]:     https://packagist.org/packages/arcanedev/sanitizer
 [link-travis]:        https://travis-ci.org/ARCANEDEV/Sanitizer
-[link-hhvm]:          http://hhvm.h4cc.de/package/arcanedev/sanitizer
 [link-scrutinizer]:   https://scrutinizer-ci.com/g/ARCANEDEV/Sanitizer/?branch=master
 [link-insight]:       https://insight.sensiolabs.com/projects/d27f1be9-328b-4cb4-ac67-27c10ba10c2d
